@@ -1,41 +1,27 @@
-namespace SecondEgSA.Model1
+using Repo_Core.Models;
+
+namespace FlightControlCenter.Model1
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    
 
-    [Table("Command")]
-    public partial class Command
+
+
+    public class Command
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Command()
-        {
-            CoM_Param = new HashSet<CoM_Param>();
-            
-        }
+        public int Id { get; set; }
+        public string? Description { get; set; }
+        public int SubSystemId { get; set; }
+        public SubSystem SubSystem { get; set; }
 
-        [Key]
-        [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int com_id { get; set; }
+        [Required]
+        public string SensorName { get; set; }
 
-        [StringLength(40)]
-        public string com_description { get; set; }
-
-        
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int sub_ID { get; set; }
-
-        [StringLength(100)]
-        public string sensor_name { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CoM_Param> CoM_Param { get; set; }
-
-        
-        
+        public int PlanId { get; set; }
+        public int PlanSequenceNumber { get; set; }
+        public virtual Plan Plan { get; set; }
+        public virtual List<CommandParam> CommandParams { get; set; } = new();
     }
 }

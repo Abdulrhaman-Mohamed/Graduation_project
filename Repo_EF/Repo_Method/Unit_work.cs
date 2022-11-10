@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Repo_EF.Repo_Method
 {
-    public class Unit_work : IUnitWork
+    public class UnitWork : IUnitWork
     {
-        private readonly  ApplicationDbcontext _dbcontext;
-        public IRegsiter<Register> Regsiters  { get; private set; }
-        public Unit_work(ApplicationDbcontext dbcontext)
+        private readonly ApplicationDbContext _dbContext;
+        public IRegsiter<Register> Regsiters { get; set; }
+        public UnitWork(ApplicationDbContext dbContext)
         {
-            _dbcontext = dbcontext;
-            Regsiters = new Regsiter_Method<Register>(_dbcontext);
+            _dbContext = dbContext;
+            Regsiters = new Regsiter_Method<Register>(_dbContext);
         }
 
-        public int complete()
+        public int Complete()
         {
-            return _dbcontext.SaveChanges();
+            return _dbContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            _dbcontext.Dispose();
+            _dbContext.Dispose();
         }
     }
 }

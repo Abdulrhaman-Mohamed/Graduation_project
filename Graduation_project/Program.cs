@@ -5,12 +5,12 @@ using Repo_EF;
 using Repo_EF.Repo_Method;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ApplicationDbcontext>(
+builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
-    o => o.MigrationsAssembly(typeof(ApplicationDbcontext).Assembly.FullName)));
+    o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
-builder.Services.AddTransient<IUnitWork, Unit_work>();
+builder.Services.AddTransient<IUnitWork, UnitWork>();
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

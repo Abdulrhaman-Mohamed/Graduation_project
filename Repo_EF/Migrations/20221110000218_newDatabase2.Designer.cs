@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repo_EF;
 
@@ -11,9 +12,10 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221110000218_newDatabase2")]
+    partial class newDatabase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,10 +174,19 @@ namespace Repo_EF.Migrations
                     b.Property<int>("Device")
                         .HasColumnType("int");
 
+                    b.Property<int>("ParamTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommandId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CommandParamCommandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CommandParamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommandParamId1")
                         .HasColumnType("int");
 
                     b.Property<int>("CommandParamParamTypeId")
@@ -185,9 +196,9 @@ namespace Repo_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "Device");
+                    b.HasKey("Id", "Device", "ParamTypeId");
 
-                    b.HasIndex("CommandParamId", "CommandParamCommandId", "CommandParamParamTypeId");
+                    b.HasIndex("CommandParamId1", "CommandParamCommandId", "CommandParamParamTypeId");
 
                     b.ToTable("ParamValues");
                 });
@@ -342,7 +353,7 @@ namespace Repo_EF.Migrations
                 {
                     b.HasOne("Repo_Core.Models.CommandParam", "CommandParam")
                         .WithMany("ParamValues")
-                        .HasForeignKey("CommandParamId", "CommandParamCommandId", "CommandParamParamTypeId")
+                        .HasForeignKey("CommandParamId1", "CommandParamCommandId", "CommandParamParamTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

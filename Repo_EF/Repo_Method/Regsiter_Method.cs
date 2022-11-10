@@ -9,8 +9,8 @@ namespace Repo_EF.Repo_Method
 {
     public class Regsiter_Method<T> : IRegsiter<T> where T : class
     {
-        protected ApplicationDbcontext _DbContext;
-        public Regsiter_Method(ApplicationDbcontext dbContext)
+        protected ApplicationDbContext _DbContext;
+        public Regsiter_Method(ApplicationDbContext dbContext)
         {
             _DbContext = dbContext;
         }

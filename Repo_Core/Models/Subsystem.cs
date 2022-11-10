@@ -1,26 +1,13 @@
-namespace SecondEgSA.Model1
+namespace FlightControlCenter.Model1
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    
-
-    [Table("Subsystem")]
-    public partial class Subsystem
+    public class SubSystem
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Sub_ID { get; set; }
 
-        public int? Sat_ID { get; set; }
-
-        [StringLength(30)]
-        public string Sub_name { get; set; }
-
-        [StringLength(30)]
-        public string Sub_type { get; set; }
-
-        public virtual Satellite Satellite { get; set; }
+        public int Id { get; set; }
+        public string? SubSystemName { get; set; }
+        public int? SubSystemType { get; set; }
+        public int SatelliteId { get; set; }
+        public virtual List<Command> Commands { get; set; } = new();
+        public virtual Satellite Satellite { get; set; } = new();
     }
 }
