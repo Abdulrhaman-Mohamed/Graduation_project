@@ -169,13 +169,19 @@ namespace Repo_EF.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Device")
+                    b.Property<int>("CommandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommandParamId")
                         .HasColumnType("int");
 
                     b.Property<int>("CommandParamCommandId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommandParamId")
+                    b.Property<int>("CommandParamId1")
                         .HasColumnType("int");
 
                     b.Property<int>("CommandParamParamTypeId")
@@ -185,9 +191,16 @@ namespace Repo_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "Device");
+                    b.Property<int>("Device")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CommandParamId", "CommandParamCommandId", "CommandParamParamTypeId");
+                    b.HasKey("Id", "CommandId", "SubSystemId", "CommandParamId");
+
+                    b.HasIndex("CommandId");
+
+                    b.HasIndex("SubSystemId");
+
+                    b.HasIndex("CommandParamId1", "CommandParamCommandId", "CommandParamParamTypeId");
 
                     b.ToTable("ParamValues");
                 });
@@ -340,13 +353,29 @@ namespace Repo_EF.Migrations
 
             modelBuilder.Entity("Repo_Core.Models.ParamValue", b =>
                 {
-                    b.HasOne("Repo_Core.Models.CommandParam", "CommandParam")
-                        .WithMany("ParamValues")
-                        .HasForeignKey("CommandParamId", "CommandParamCommandId", "CommandParamParamTypeId")
+                    b.HasOne("FlightControlCenter.Model1.Command", "Command")
+                        .WithMany()
+                        .HasForeignKey("CommandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FlightControlCenter.Model1.SubSystem", "SubSystem")
+                        .WithMany()
+                        .HasForeignKey("SubSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Repo_Core.Models.CommandParam", "CommandParam")
+                        .WithMany("ParamValues")
+                        .HasForeignKey("CommandParamId1", "CommandParamCommandId", "CommandParamParamTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Command");
+
                     b.Navigation("CommandParam");
+
+                    b.Navigation("SubSystem");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Plan", b =>

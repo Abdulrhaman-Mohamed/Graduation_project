@@ -48,7 +48,7 @@ namespace Repo_EF
 
             // ParamValue
             modelBuilder.Entity<ParamValue>()
-                .HasKey(c => new { c.Id, c.Device });
+                .HasKey(c => new { c.Id, c.CommandId, c.SubSystemId, c.CommandParamId });
 
             // ParamValue
             modelBuilder.Entity<CommandParam>()

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repo_EF.Migrations
 {
-    public partial class newDatabase2 : Migration
+    public partial class mig2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -216,23 +216,35 @@ namespace Repo_EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    ParamTypeId = table.Column<int>(type: "int", nullable: false),
-                    Device = table.Column<int>(type: "int", nullable: false),
-                    CommandParamId = table.Column<int>(type: "int", nullable: false),
                     CommandId = table.Column<int>(type: "int", nullable: false),
+                    SubSystemId = table.Column<int>(type: "int", nullable: false),
+                    CommandParamId = table.Column<int>(type: "int", nullable: false),
+                    Device = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommandParamId1 = table.Column<int>(type: "int", nullable: false),
                     CommandParamCommandId = table.Column<int>(type: "int", nullable: false),
-                    CommandParamParamTypeId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CommandParamParamTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParamValues", x => new { x.Id, x.Device, x.ParamTypeId });
+                    table.PrimaryKey("PK_ParamValues", x => new { x.Id, x.CommandId, x.SubSystemId, x.CommandParamId });
                     table.ForeignKey(
                         name: "FK_ParamValues_CommandParams_CommandParamId1_CommandParamCommandId_CommandParamParamTypeId",
                         columns: x => new { x.CommandParamId1, x.CommandParamCommandId, x.CommandParamParamTypeId },
                         principalTable: "CommandParams",
                         principalColumns: new[] { "Id", "CommandId", "ParamTypeId" },
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParamValues_Commands_CommandId",
+                        column: x => x.CommandId,
+                        principalTable: "Commands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParamValues_Subsystems_SubSystemId",
+                        column: x => x.SubSystemId,
+                        principalTable: "Subsystems",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -257,9 +269,19 @@ namespace Repo_EF.Migrations
                 column: "SubSystemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ParamValues_CommandId",
+                table: "ParamValues",
+                column: "CommandId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParamValues_CommandParamId1_CommandParamCommandId_CommandParamParamTypeId",
                 table: "ParamValues",
                 columns: new[] { "CommandParamId1", "CommandParamCommandId", "CommandParamParamTypeId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParamValues_SubSystemId",
+                table: "ParamValues",
+                column: "SubSystemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlanResults_PlanId_PlanSequenceNumber",
