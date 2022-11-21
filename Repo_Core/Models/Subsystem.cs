@@ -1,3 +1,5 @@
+using Repo_Core.Models;
+
 namespace FlightControlCenter.Model1
 {
     public class SubSystem
@@ -7,7 +9,9 @@ namespace FlightControlCenter.Model1
         public string? SubSystemName { get; set; }
         public int? SubSystemType { get; set; }
         public int SatelliteId { get; set; }
-        public virtual List<Command> Commands { get; set; } = new();
-        public virtual Satellite Satellite { get; set; } = new();
+        public virtual List<Command> Commands { get; set; }
+
+
+        public virtual Satellite Satellite { get; set; }
     }
 }

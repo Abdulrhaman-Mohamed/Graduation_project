@@ -33,7 +33,9 @@ namespace Repo_EF
 
             // Command 
             modelBuilder.Entity<Command>()
-                .HasKey(c => new { c.Id });
+                .HasKey(c => new { c.Id, c.SubSystemId });
+
+
 
             // Plan 
             modelBuilder.Entity<Plan>()
@@ -46,16 +48,31 @@ namespace Repo_EF
             // Acknowledge
             modelBuilder.Entity<Acknowledge>().HasKey(c => new { c.Id });
 
-            // ParamValue
-            modelBuilder.Entity<ParamValue>()
-                .HasKey(c => new { c.Id, c.CommandId, c.SubSystemId, c.CommandParamId });
 
-            // ParamValue
+
+            //CommandParam
+            modelBuilder.Entity<CommandParam>().HasOne(c => c.Command)
+               .WithMany(c => c.CommandParams)
+               .HasForeignKey(c => new { c.CommandId, c.SubSystemId });
+
             modelBuilder.Entity<CommandParam>()
-                .HasKey(c => new { c.Id, c.CommandId, c.ParamTypeId });
+                .HasKey(c => new { c.Id, c.CommandId, c.SubSystemId });
+
+
+
 
             // ParamType
             modelBuilder.Entity<ParamType>().HasKey(c => new { c.Id });
+            // ParamValue
+            modelBuilder.Entity<ParamValue>().HasOne(c => c.CommandParam)
+                .WithMany(c => c.ParamValues)
+                .HasForeignKey(c => new { c.CommandParamID, c.CommandID, c.SubSystemID });
+
+            modelBuilder.Entity<ParamValue>().HasKey(c => new { c.Id, c.SubSystemID, c.CommandID, c.CommandParamID });
+
+
+
+
 
         }
 

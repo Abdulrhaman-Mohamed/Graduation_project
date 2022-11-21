@@ -22,6 +22,8 @@ namespace FlightControlCenter.Model1
         public int PlanId { get; set; }
         public int PlanSequenceNumber { get; set; }
         public virtual Plan Plan { get; set; }
-        public virtual List<CommandParam> CommandParams { get; set; } = new();
+        public virtual List<CommandParam> CommandParams { get; set; }
+
+
     }
 }
