@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repo_Core.Models;
 using FlightControlCenter.Model1;
 
 namespace Repo_EF
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext  
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
