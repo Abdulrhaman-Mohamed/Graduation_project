@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Identity.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Identity
 {
-    public class UserDbcontext : IdentityDbContext
+    public class UserDbcontext : IdentityDbContext<ApplicationUser>
     {
         public UserDbcontext(DbContextOptions<UserDbcontext> options) : base(options)
         {

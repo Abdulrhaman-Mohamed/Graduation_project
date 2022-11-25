@@ -8,5 +8,7 @@ namespace Repo_Core
 
         int Complete();
         IRegsiter<Register> Regsiters { get; set; }
+
+        
     }
 }
