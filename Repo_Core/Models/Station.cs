@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FlightControlCenter.Model1;
+
 
 namespace Repo_Core.Models
 {

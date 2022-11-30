@@ -1,6 +1,6 @@
 using Repo_Core.Models;
 
-namespace FlightControlCenter.Model1
+namespace Repo_Core.Models
 {
     using System;
     using System.Collections.Generic;

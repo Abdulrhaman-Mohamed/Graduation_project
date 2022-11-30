@@ -12,8 +12,8 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221121172759_UpdateParamValue")]
-    partial class UpdateParamValue
+    [Migration("20221130094636_DataBaseBulid")]
+    partial class DataBaseBulid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,8 +96,8 @@ namespace Repo_EF.Migrations
                     b.Property<string>("SubSystemName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubSystemType")
-                        .HasColumnType("int");
+                    b.Property<string>("SubSystemType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

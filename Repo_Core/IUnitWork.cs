@@ -1,5 +1,7 @@
-﻿using Repo_Core.Interface;
+﻿
+using Repo_Core.Interface;
 using Repo_Core.Models;
+using System.Reflection.PortableExecutable;
 
 namespace Repo_Core
 {
@@ -7,8 +9,11 @@ namespace Repo_Core
     {
 
         int Complete();
-        IRegsiter<Register> Regsiters { get; set; }
+        IRegsiter<Register> Regsiters { get;  }
 
+        IPlan<SubSystem> SubSystems { get; }
         
+
+
     }
 }

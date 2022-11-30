@@ -8,7 +8,7 @@ using Repo_EF;
 
 #nullable disable
 
-namespace RepoEF.Migrations
+namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -49,7 +49,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("PlanId", "PlanSequenceNumber");
 
-                    b.ToTable("Commands", (string)null);
+                    b.ToTable("Commands");
                 });
 
             modelBuilder.Entity("FlightControlCenter.Model1.Satellite", b =>
@@ -77,7 +77,7 @@ namespace RepoEF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Satellites", (string)null);
+                    b.ToTable("Satellites");
                 });
 
             modelBuilder.Entity("FlightControlCenter.Model1.SubSystem", b =>
@@ -94,14 +94,14 @@ namespace RepoEF.Migrations
                     b.Property<string>("SubSystemName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubSystemType")
-                        .HasColumnType("int");
+                    b.Property<string>("SubSystemType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SatelliteId");
 
-                    b.ToTable("Subsystems", (string)null);
+                    b.ToTable("Subsystems");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Acknowledge", b =>
@@ -121,7 +121,7 @@ namespace RepoEF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Acknowledges", (string)null);
+                    b.ToTable("Acknowledges");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>
@@ -144,7 +144,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("CommandId", "SubSystemId");
 
-                    b.ToTable("CommandParams", (string)null);
+                    b.ToTable("CommandParams");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.ParamType", b =>
@@ -161,7 +161,7 @@ namespace RepoEF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ParamTypes", (string)null);
+                    b.ToTable("ParamTypes");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.ParamValue", b =>
@@ -192,7 +192,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("CommandParamID", "CommandID", "SubSystemID");
 
-                    b.ToTable("ParamValues", (string)null);
+                    b.ToTable("ParamValues");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Plan", b =>
@@ -222,7 +222,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("AcknowledgeId");
 
-                    b.ToTable("Plans", (string)null);
+                    b.ToTable("Plans");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.PlanResult", b =>
@@ -247,7 +247,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("PlanId", "PlanSequenceNumber");
 
-                    b.ToTable("PlanResults", (string)null);
+                    b.ToTable("PlanResults");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Station", b =>
@@ -274,7 +274,7 @@ namespace RepoEF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stations", (string)null);
+                    b.ToTable("Stations");
                 });
 
             modelBuilder.Entity("SatelliteStation", b =>
@@ -289,7 +289,7 @@ namespace RepoEF.Migrations
 
                     b.HasIndex("StationsId");
 
-                    b.ToTable("SatelliteStation", (string)null);
+                    b.ToTable("SatelliteStation");
                 });
 
             modelBuilder.Entity("FlightControlCenter.Model1.Command", b =>

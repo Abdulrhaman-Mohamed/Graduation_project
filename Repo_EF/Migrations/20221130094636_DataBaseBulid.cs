@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repo_EF.Migrations
 {
-    public partial class UpdateParamValue : Migration
+    public partial class DataBaseBulid : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,7 +98,7 @@ namespace Repo_EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubSystemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubSystemType = table.Column<int>(type: "int", nullable: true),
+                    SubSystemType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SatelliteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
