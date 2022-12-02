@@ -16,7 +16,10 @@ namespace Repo_Core.Models
         public string Repeat { get; set; }
         public int AcknowledgeId { get; set; }
         public virtual Acknowledge Acknowledge { get; set; }
-        public virtual List<Command> Commands { get; set; } = new();
+
+        public int SubSystemId { get; set; }
+        public int commandID { get; set; }
+        public Command Command { get; set; }
 
     }
 }

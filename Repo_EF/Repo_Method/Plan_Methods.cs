@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,9 @@ namespace Repo_EF.Repo_Method
         // use to get list of any class of model like (Subsystem or commands or any class)
         public List<T> GetListOf() => Context.Set<T>().ToList();
 
-
-
+        public IEnumerable<T> GetListbyid(Expression<Func<T, bool>> id)
+        {
+            return Context.Set<T>().Where(id).ToList();
+        }
     }
 }

@@ -12,8 +12,8 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221130094636_DataBaseBulid")]
-    partial class DataBaseBulid
+    [Migration("20221202122332_FixSomeofBugsinDataBase")]
+    partial class FixSomeofBugsinDataBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,88 +23,6 @@ namespace Repo_EF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("FlightControlCenter.Model1.Command", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubSystemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PlanId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlanSequenceNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SensorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id", "SubSystemId");
-
-                    b.HasIndex("SubSystemId");
-
-                    b.HasIndex("PlanId", "PlanSequenceNumber");
-
-                    b.ToTable("Commands");
-                });
-
-            modelBuilder.Entity("FlightControlCenter.Model1.Satellite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<decimal?>("Mass")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrbitType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SatelliteType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Satellites");
-                });
-
-            modelBuilder.Entity("FlightControlCenter.Model1.SubSystem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("SatelliteId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubSystemName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubSystemType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SatelliteId");
-
-                    b.ToTable("Subsystems");
-                });
 
             modelBuilder.Entity("Repo_Core.Models.Acknowledge", b =>
                 {
@@ -124,6 +42,28 @@ namespace Repo_EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Acknowledges");
+                });
+
+            modelBuilder.Entity("Repo_Core.Models.Command", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SensorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id", "SubSystemId");
+
+                    b.HasIndex("SubSystemId");
+
+                    b.ToTable("Commands");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>
@@ -220,9 +160,17 @@ namespace Repo_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SubSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("commandID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id", "SequenceNumber");
 
                     b.HasIndex("AcknowledgeId");
+
+                    b.HasIndex("commandID", "SubSystemId");
 
                     b.ToTable("Plans");
                 });
@@ -252,6 +200,34 @@ namespace Repo_EF.Migrations
                     b.ToTable("PlanResults");
                 });
 
+            modelBuilder.Entity("Repo_Core.Models.Satellite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("Mass")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrbitType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SatelliteType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Satellites");
+                });
+
             modelBuilder.Entity("Repo_Core.Models.Station", b =>
                 {
                     b.Property<int>("Id")
@@ -279,6 +255,30 @@ namespace Repo_EF.Migrations
                     b.ToTable("Stations");
                 });
 
+            modelBuilder.Entity("Repo_Core.Models.SubSystem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("SatelliteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubSystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubSystemType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SatelliteId");
+
+                    b.ToTable("Subsystems");
+                });
+
             modelBuilder.Entity("SatelliteStation", b =>
                 {
                     b.Property<int>("SatellitesId")
@@ -294,34 +294,15 @@ namespace Repo_EF.Migrations
                     b.ToTable("SatelliteStation");
                 });
 
-            modelBuilder.Entity("FlightControlCenter.Model1.Command", b =>
+            modelBuilder.Entity("Repo_Core.Models.Command", b =>
                 {
-                    b.HasOne("FlightControlCenter.Model1.SubSystem", "SubSystem")
+                    b.HasOne("Repo_Core.Models.SubSystem", "SubSystem")
                         .WithMany("Commands")
                         .HasForeignKey("SubSystemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Repo_Core.Models.Plan", "Plan")
-                        .WithMany("Commands")
-                        .HasForeignKey("PlanId", "PlanSequenceNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plan");
-
                     b.Navigation("SubSystem");
-                });
-
-            modelBuilder.Entity("FlightControlCenter.Model1.SubSystem", b =>
-                {
-                    b.HasOne("FlightControlCenter.Model1.Satellite", "Satellite")
-                        .WithMany("Subsystems")
-                        .HasForeignKey("SatelliteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Satellite");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>
@@ -332,7 +313,7 @@ namespace Repo_EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlightControlCenter.Model1.Command", "Command")
+                    b.HasOne("Repo_Core.Models.Command", "Command")
                         .WithMany("CommandParams")
                         .HasForeignKey("CommandId", "SubSystemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -362,7 +343,15 @@ namespace Repo_EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Repo_Core.Models.Command", "Command")
+                        .WithMany("Plans")
+                        .HasForeignKey("commandID", "SubSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Acknowledge");
+
+                    b.Navigation("Command");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.PlanResult", b =>
@@ -376,9 +365,20 @@ namespace Repo_EF.Migrations
                     b.Navigation("Plan");
                 });
 
+            modelBuilder.Entity("Repo_Core.Models.SubSystem", b =>
+                {
+                    b.HasOne("Repo_Core.Models.Satellite", "Satellite")
+                        .WithMany("Subsystems")
+                        .HasForeignKey("SatelliteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Satellite");
+                });
+
             modelBuilder.Entity("SatelliteStation", b =>
                 {
-                    b.HasOne("FlightControlCenter.Model1.Satellite", null)
+                    b.HasOne("Repo_Core.Models.Satellite", null)
                         .WithMany()
                         .HasForeignKey("SatellitesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -391,19 +391,11 @@ namespace Repo_EF.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FlightControlCenter.Model1.Command", b =>
+            modelBuilder.Entity("Repo_Core.Models.Command", b =>
                 {
                     b.Navigation("CommandParams");
-                });
 
-            modelBuilder.Entity("FlightControlCenter.Model1.Satellite", b =>
-                {
-                    b.Navigation("Subsystems");
-                });
-
-            modelBuilder.Entity("FlightControlCenter.Model1.SubSystem", b =>
-                {
-                    b.Navigation("Commands");
+                    b.Navigation("Plans");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>
@@ -411,7 +403,12 @@ namespace Repo_EF.Migrations
                     b.Navigation("ParamValues");
                 });
 
-            modelBuilder.Entity("Repo_Core.Models.Plan", b =>
+            modelBuilder.Entity("Repo_Core.Models.Satellite", b =>
+                {
+                    b.Navigation("Subsystems");
+                });
+
+            modelBuilder.Entity("Repo_Core.Models.SubSystem", b =>
                 {
                     b.Navigation("Commands");
                 });

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repo_EF.Migrations
 {
-    public partial class DataBaseBulid : Migration
+    public partial class FixSomeofBugsinDataBase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,28 +70,6 @@ namespace Repo_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Plans",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
-                    Delay = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AckId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Repeat = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcknowledgeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Plans", x => new { x.Id, x.SequenceNumber });
-                    table.ForeignKey(
-                        name: "FK_Plans_Acknowledges_AcknowledgeId",
-                        column: x => x.AcknowledgeId,
-                        principalTable: "Acknowledges",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Subsystems",
                 columns: table => new
                 {
@@ -137,46 +115,17 @@ namespace Repo_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlanResults",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    PlanSequenceNumber = table.Column<int>(type: "int", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
-                    Time = table.Column<int>(type: "int", nullable: false),
-                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlanResults", x => new { x.Id, x.PlanId, x.PlanSequenceNumber });
-                    table.ForeignKey(
-                        name: "FK_PlanResults_Plans_PlanId_PlanSequenceNumber",
-                        columns: x => new { x.PlanId, x.PlanSequenceNumber },
-                        principalTable: "Plans",
-                        principalColumns: new[] { "Id", "SequenceNumber" },
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Commands",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     SubSystemId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SensorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
-                    PlanSequenceNumber = table.Column<int>(type: "int", nullable: false)
+                    SensorName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Commands", x => new { x.Id, x.SubSystemId });
-                    table.ForeignKey(
-                        name: "FK_Commands_Plans_PlanId_PlanSequenceNumber",
-                        columns: x => new { x.PlanId, x.PlanSequenceNumber },
-                        principalTable: "Plans",
-                        principalColumns: new[] { "Id", "SequenceNumber" },
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Commands_Subsystems_SubSystemId",
                         column: x => x.SubSystemId,
@@ -212,6 +161,36 @@ namespace Repo_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Plans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    Delay = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AckId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Repeat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AcknowledgeId = table.Column<int>(type: "int", nullable: false),
+                    SubSystemId = table.Column<int>(type: "int", nullable: false),
+                    commandID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plans", x => new { x.Id, x.SequenceNumber });
+                    table.ForeignKey(
+                        name: "FK_Plans_Acknowledges_AcknowledgeId",
+                        column: x => x.AcknowledgeId,
+                        principalTable: "Acknowledges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Plans_Commands_commandID_SubSystemId",
+                        columns: x => new { x.commandID, x.SubSystemId },
+                        principalTable: "Commands",
+                        principalColumns: new[] { "Id", "SubSystemId" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ParamValues",
                 columns: table => new
                 {
@@ -234,6 +213,27 @@ namespace Repo_EF.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PlanResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    PlanSequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanResults", x => new { x.Id, x.PlanId, x.PlanSequenceNumber });
+                    table.ForeignKey(
+                        name: "FK_PlanResults_Plans_PlanId_PlanSequenceNumber",
+                        columns: x => new { x.PlanId, x.PlanSequenceNumber },
+                        principalTable: "Plans",
+                        principalColumns: new[] { "Id", "SequenceNumber" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CommandParams_CommandId_SubSystemId",
                 table: "CommandParams",
@@ -243,11 +243,6 @@ namespace Repo_EF.Migrations
                 name: "IX_CommandParams_ParamTypeId",
                 table: "CommandParams",
                 column: "ParamTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Commands_PlanId_PlanSequenceNumber",
-                table: "Commands",
-                columns: new[] { "PlanId", "PlanSequenceNumber" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commands_SubSystemId",
@@ -268,6 +263,11 @@ namespace Repo_EF.Migrations
                 name: "IX_Plans_AcknowledgeId",
                 table: "Plans",
                 column: "AcknowledgeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Plans_commandID_SubSystemId",
+                table: "Plans",
+                columns: new[] { "commandID", "SubSystemId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SatelliteStation_StationsId",
@@ -295,22 +295,22 @@ namespace Repo_EF.Migrations
                 name: "CommandParams");
 
             migrationBuilder.DropTable(
-                name: "Stations");
+                name: "Plans");
 
             migrationBuilder.DropTable(
-                name: "Commands");
+                name: "Stations");
 
             migrationBuilder.DropTable(
                 name: "ParamTypes");
 
             migrationBuilder.DropTable(
-                name: "Plans");
+                name: "Acknowledges");
+
+            migrationBuilder.DropTable(
+                name: "Commands");
 
             migrationBuilder.DropTable(
                 name: "Subsystems");
-
-            migrationBuilder.DropTable(
-                name: "Acknowledges");
 
             migrationBuilder.DropTable(
                 name: "Satellites");
