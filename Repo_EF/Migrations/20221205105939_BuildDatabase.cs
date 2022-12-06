@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repo_EF.Migrations
 {
-    public partial class FixSomeofBugsinDataBase : Migration
+    public partial class BuildDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +13,7 @@ namespace Repo_EF.Migrations
                 name: "Acknowledges",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     AckNum = table.Column<int>(type: "int", nullable: false),
                     AckDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -28,7 +27,7 @@ namespace Repo_EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        ,
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -41,7 +40,7 @@ namespace Repo_EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        ,
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "date", nullable: true),
                     Mass = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -58,7 +57,7 @@ namespace Repo_EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        ,
                     StationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -74,7 +73,7 @@ namespace Repo_EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        ,
                     SubSystemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubSystemType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SatelliteId = table.Column<int>(type: "int", nullable: false)
@@ -164,7 +163,8 @@ namespace Repo_EF.Migrations
                 name: "Plans",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     Delay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AckId = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -217,7 +217,8 @@ namespace Repo_EF.Migrations
                 name: "PlanResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
                     PlanSequenceNumber = table.Column<int>(type: "int", nullable: false),
                     PlanId = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),

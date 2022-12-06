@@ -12,8 +12,8 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221202122332_FixSomeofBugsinDataBase")]
-    partial class FixSomeofBugsinDataBase
+    [Migration("20221205105939_BuildDatabase")]
+    partial class BuildDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
