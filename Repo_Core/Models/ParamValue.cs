@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FlightControlCenter.Model1;
+
 
 namespace Repo_Core.Models
 {
@@ -11,7 +11,6 @@ namespace Repo_Core.Models
     {
         public int Id { get; set; }
         public int Device { get; set; }
-        public int MyProperty { get; set; }
         public int CommandID { get; set; }
         public int SubSystemID { get; set; }
         public int CommandParamID { get; set; }

@@ -1,6 +1,6 @@
 using Repo_Core.Models;
 
-namespace FlightControlCenter.Model1
+namespace Repo_Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -16,12 +16,10 @@ namespace FlightControlCenter.Model1
         public int SubSystemId { get; set; }
         public SubSystem SubSystem { get; set; }
 
-        [Required]
+        
         public string SensorName { get; set; }
 
-        public int PlanId { get; set; }
-        public int PlanSequenceNumber { get; set; }
-        public virtual Plan Plan { get; set; }
+        public virtual List<Plan> Plans { get; set; }
         public virtual List<CommandParam> CommandParams { get; set; }
 
 

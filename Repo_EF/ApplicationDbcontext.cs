@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repo_Core.Models;
-using FlightControlCenter.Model1;
+
 
 namespace Repo_EF
 {
     public class ApplicationDbContext : DbContext  
     {
+     
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
+        
         //public DbSet<Register> Registers { get; set; }
 
         public virtual DbSet<Command> Commands { get; set; }
@@ -41,6 +44,12 @@ namespace Repo_EF
             // Plan 
             modelBuilder.Entity<Plan>()
                 .HasKey(c => new { c.Id, c.SequenceNumber });
+
+            modelBuilder.Entity<Plan>().HasOne(o => o.Command)
+                .WithMany(o => o.Plans)
+                .HasForeignKey(o => new { o.commandID, o.SubSystemId });
+                
+
 
             // PlanResult 
             modelBuilder.Entity<PlanResult>()
@@ -79,13 +88,18 @@ namespace Repo_EF
 
 
 
+    }
+    public class MyBackupDbContext : DbContext
+    {
 
 
-
-
-
-
-
+        public MyBackupDbContext(DbContextOptions<MyBackupDbContext> options) : base(options)
+        {
+           
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        { 
+        }
     }
 }
 

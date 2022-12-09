@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FlightControlCenter.Model1;
+
 
 namespace Repo_Core.Models
 {
@@ -10,7 +10,7 @@ namespace Repo_Core.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string StationName { get; set; }
+        public string StationNam { get; set; }
         [Required]
         public string StationType { get; set; }
         public decimal Longitude { get; set; }

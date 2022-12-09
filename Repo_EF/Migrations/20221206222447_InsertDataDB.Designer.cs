@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repo_EF;
 
@@ -11,9 +12,10 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206222447_InsertDataDB")]
+    partial class InsertDataDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,6 +127,9 @@ namespace Repo_EF.Migrations
                     b.Property<int>("Device")
                         .HasColumnType("int");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
                     b.HasKey("Id", "SubSystemID", "CommandID", "CommandParamID");
 
                     b.HasIndex("CommandParamID", "CommandID", "SubSystemID");
@@ -140,15 +145,16 @@ namespace Repo_EF.Migrations
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
 
+                    b.Property<string>("AckId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AcknowledgeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Delay")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EX_Time")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Repeat")
                         .IsRequired()

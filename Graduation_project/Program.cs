@@ -13,6 +13,7 @@ using Repo_EF.Repo_Method;
 using System.Text;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+builder.Services.AddDbContext<MyBackupDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SecondConnection"),
+    o => o.MigrationsAssembly(typeof(MyBackupDbContext).Assembly.FullName)));
 
 builder.Services.AddDbContext<UserDbcontext>(
     options =>
