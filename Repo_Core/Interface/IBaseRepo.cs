@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace Repo_Core.Interface
 {
-    public interface IPlan<T> where T : class
+    public interface IBaseRepo<T> where T : class
     {
-        List<T> GetListOf();
+        IEnumerable<T> GetListOf();
 
         IEnumerable<T> GetListbyid(Expression<Func<T , bool>> id);
+
+        IEnumerable<T> GetListwithTwoParamter (Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId);
+
+        
 
     }
 }

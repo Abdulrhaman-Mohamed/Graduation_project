@@ -11,7 +11,14 @@ namespace Repo_Core
         int Complete();
         IRegsiter<Register> Regsiters { get;  }
 
-        IPlan<SubSystem> SubSystems { get; }
+        IBaseRepo<SubSystem> SubSystems { get; }
+
+        IBaseRepo<Command> Commands { get; }
+
+        IBaseRepo<CommandParam> CommandParams { get; }
+        IBaseRepo<ParamType> ParamTypes { get; }
+
+        IBaseRepo<ParamValue> ParamValues { get; }
         
 
 

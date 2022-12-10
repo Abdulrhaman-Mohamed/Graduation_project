@@ -25,7 +25,14 @@ namespace Repo_EF.Repo_Method
         public IRegsiter<Register> Regsiters { get; private set; }
         // like IPlan is an interface and injected it by Subsystem class in model 
         // And i can inject more class if i will use funcations in this methodes Like ( GetListOf() )
-        public IPlan<SubSystem> SubSystems { get; private set; }
+        public IBaseRepo<SubSystem> SubSystems { get; private set; }
+        public IBaseRepo<Command> Commands { get; private set; }
+
+        public IBaseRepo<CommandParam> CommandParams { get; private set; }
+        public IBaseRepo<ParamType> ParamTypes { get; private set; }
+        public IBaseRepo<ParamValue> ParamValues { get; private set; }
+
+
 
         public UnitWork(ApplicationDbContext dbContext)
         {
@@ -33,8 +40,12 @@ namespace Repo_EF.Repo_Method
             
             Regsiters = new Regsiter_Method<Register>(_dbContext);
             SubSystems = new Plan_Methods<SubSystem>(_dbContext);
+            Commands = new Plan_Methods<Command>(_dbContext);
+            CommandParams = new Plan_Methods<CommandParam>(_dbContext);
+            ParamTypes = new Plan_Methods<ParamType>(_dbContext);
+            ParamValues = new Plan_Methods<ParamValue>(_dbContext);
 
-            
+
         }
 
         public int Complete()
