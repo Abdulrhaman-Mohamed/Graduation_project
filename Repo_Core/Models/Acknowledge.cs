@@ -10,6 +10,6 @@ namespace Repo_Core.Models
     {
         public int Id { get; set; }
         public int AckNum { get; set; }
-        public string AckDescription { get; set; }  
+        public string? AckDescription { get; set; }  
     }
 }

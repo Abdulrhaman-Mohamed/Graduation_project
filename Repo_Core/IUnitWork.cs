@@ -19,7 +19,10 @@ namespace Repo_Core
         IBaseRepo<ParamType> ParamTypes { get; }
 
         IBaseRepo<ParamValue> ParamValues { get; }
-        
+        IBaseRepo<Plan> Plans { get; }
+
+
+
 
 
     }

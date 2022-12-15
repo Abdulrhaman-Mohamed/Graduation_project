@@ -15,7 +15,16 @@ namespace Repo_Core.Interface
 
         IEnumerable<T> GetListwithTwoParamter (Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId);
 
+        IEnumerable<T> GetWithInclude(string [] include1);
+
+        IEnumerable<T> Getplan(Expression<Func<T, bool>> planid, string [] include);
+
+
         
+
+
+
+
 
     }
 }

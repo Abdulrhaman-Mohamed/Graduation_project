@@ -22,8 +22,8 @@ namespace Repo_Core.Models
         public decimal? Mass { get; set; }
         public int? SatelliteType { get; set; }
         public string? OrbitType { get; set; }
-        public virtual List<SubSystem> Subsystems { get; set; } = new();
-        public virtual List<Station> Stations { get; set; } = new();
+        public virtual List<SubSystem>? Subsystems { get; set; } 
+        public virtual List<Station>? Stations { get; set; } 
 
 
 

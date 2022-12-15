@@ -31,6 +31,9 @@ namespace Repo_EF.Repo_Method
         public IBaseRepo<CommandParam> CommandParams { get; private set; }
         public IBaseRepo<ParamType> ParamTypes { get; private set; }
         public IBaseRepo<ParamValue> ParamValues { get; private set; }
+        public IBaseRepo<Plan> Plans { get; private set; }
+
+
 
 
 
@@ -39,11 +42,12 @@ namespace Repo_EF.Repo_Method
             _dbContext = dbContext;
             
             Regsiters = new Regsiter_Method<Register>(_dbContext);
-            SubSystems = new Plan_Methods<SubSystem>(_dbContext);
-            Commands = new Plan_Methods<Command>(_dbContext);
-            CommandParams = new Plan_Methods<CommandParam>(_dbContext);
-            ParamTypes = new Plan_Methods<ParamType>(_dbContext);
-            ParamValues = new Plan_Methods<ParamValue>(_dbContext);
+            SubSystems = new BaseMethodes<SubSystem>(_dbContext);
+            Commands = new BaseMethodes<Command>(_dbContext);
+            CommandParams = new BaseMethodes<CommandParam>(_dbContext);
+            ParamTypes = new BaseMethodes<ParamType>(_dbContext);
+            ParamValues = new BaseMethodes<ParamValue>(_dbContext);
+            Plans = new BaseMethodes<Plan>(_dbContext);
 
 
         }

@@ -21,16 +21,23 @@ namespace Graduation_project.Controllers
         [HttpGet("GetAllSubsystem")]
         public IActionResult GetAllOF()
         {
-            return Ok(_unitWork.SubSystems.GetListOf().Select(o => new { o.SubSystemName , o.Id } ));
+            return Ok(_unitWork.SubSystems.GetListOf());
         }
 
         [HttpGet("GetCommandOf")]
-        public IActionResult GetCommandOF(int id)
+        public IActionResult GetCommandOF(int? id)
         {
-            return Ok(_unitWork.Commands.GetListbyid(o=>o.SubSystemId == id).Select(o=> new {o.Description , o.Id}));
+            if(id.Equals(null))
+                return BadRequest("wrong ID");
+            var Query = _unitWork.Commands.GetListbyid(o => o.SubSystemId == id).Select(o => new { o.Description, o.Id });
+             if(!Query.Any())
+                return NotFound("Not Exist");
+
+
+            return Ok(Query);
         }
 
-        [HttpGet("ParamType")]
+        [HttpPost("ParamType")]
         public IActionResult ParamType( int? subid ,  int? commandid)
         {
 
@@ -65,7 +72,37 @@ namespace Graduation_project.Controllers
             
         }
 
+        [HttpPost("GetAllSubsystem_Commands")]
+        public IActionResult GetAllSubsystem_Commands()
+        {
+            return Ok(_unitWork.SubSystems.GetWithInclude(new[] { "Commands" }).
+                Select(o => new
+                {
+                    o.Id,
+                    o.SubSystemName,
+                    Commands = o.Commands.Select(i => new { i.Id, i.Description })
+
+                }));
+
+        }
+        [HttpPost("GetTypeofeachCommand")]
+        public IActionResult GetTypeofeachCommand()
+        {
+            return Ok(_unitWork.CommandParams.GetWithInclude(new[] { "ParamType", "ParamValues" })
+                .Select(o => new {
+                    o.SubSystemId,
+                    o.CommandId, Paramtype= o.ParamType,
+                    ParamValues = o.ParamValues.Select(i => new { i.Id, i.Description }) }));
+        }
+
         
+
+
+
+
+
+
+
 
 
 

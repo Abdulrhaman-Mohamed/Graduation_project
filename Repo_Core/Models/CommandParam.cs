@@ -15,9 +15,9 @@ namespace Repo_Core.Models
 
         public int SubSystemId { get; set; }
 
-        public virtual ParamType ParamType { get; set; }
-        public virtual Command Command { get; set; }
-        public  List<ParamValue> ParamValues { get; set; }
+        public virtual ParamType? ParamType { get; set; }
+        public virtual Command? Command { get; set; }
+        public  List<ParamValue>?  ParamValues { get; set; }
 
 
     }

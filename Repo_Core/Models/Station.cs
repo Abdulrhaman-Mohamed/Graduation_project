@@ -10,12 +10,12 @@ namespace Repo_Core.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string StationName { get; set; }
+        public string? StationName { get; set; }
         [Required]
-        public string StationType { get; set; }
+        public string? StationType { get; set; }
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
-        public virtual List<Satellite> Satellites { get; set; } = new();
+        public virtual List<Satellite>? Satellites { get; set; } 
 
     }
 }
