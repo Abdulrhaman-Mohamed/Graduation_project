@@ -163,8 +163,7 @@ namespace Repo_EF.Migrations
                 name: "Plans",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     SequenceNumber = table.Column<int>(type: "int", nullable: false),
                     Delay = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AckId = table.Column<string>(type: "nvarchar(max)", nullable: false),

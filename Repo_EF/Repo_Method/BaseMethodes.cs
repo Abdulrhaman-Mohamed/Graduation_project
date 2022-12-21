@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -14,7 +15,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Repo_EF.Repo_Method
 {
-    public class BaseMethodes<T> : IBaseRepo<T> where T : class
+    public class BaseMethodes<T> : IBaseRepo<T> where  T : class    
     {
         protected ApplicationDbContext Context { get; set; }
         public BaseMethodes(ApplicationDbContext context)
@@ -64,6 +65,25 @@ namespace Repo_EF.Repo_Method
             return Query.Where(planid).ToList();
         }
 
-        
+        public T SavePlan(T plan)
+        {
+            Context.Set<T>().Add(plan);
+            Context.SaveChanges();
+
+            return plan;
+        }
+
+        public IEnumerable<Plan> saveall(IEnumerable<Plan> plan )
+        {
+            IQueryable<Plan> Query = Context.Plans;
+            foreach(Plan value in plan)
+            {
+                value.Id = Query.AsEnumerable().Last().Id + 1; 
+            }
+            Context.Plans.AddRange(plan);
+            Context.SaveChanges();
+
+            return plan;
+        }
     }
 }

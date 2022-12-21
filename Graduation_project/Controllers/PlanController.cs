@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Core;
+
 using Repo_Core.Models;
+using Repo_EF;
 
 namespace Graduation_project.Controllers
 {
@@ -13,9 +15,12 @@ namespace Graduation_project.Controllers
     {
         private readonly IUnitWork _unitWork;
 
-        public PlanController(IUnitWork unitWork)
+        private readonly ApplicationDbContext _dbContext;
+
+        public PlanController(IUnitWork unitWork, ApplicationDbContext dbContext)
         {
             _unitWork = unitWork;
+            _dbContext = dbContext;
         }
 
         [HttpGet("GetAllSubsystem")]
@@ -93,6 +98,22 @@ namespace Graduation_project.Controllers
                     o.SubSystemId,
                     o.CommandId, Paramtype= o.ParamType,
                     ParamValues = o.ParamValues.Select(i => new { i.Id, i.Description }) }));
+        }
+        [HttpPost("saveplan")]
+        public IActionResult saveplan(Plan planDtos)
+        {
+            _unitWork.Plans.SavePlan(new Plan {SequenceNumber= planDtos.SequenceNumber , AckId=planDtos.AckId
+            , AcknowledgeId = planDtos.AcknowledgeId , commandID =planDtos.commandID , Delay = planDtos.Delay 
+            , Repeat=planDtos.Repeat , SubSystemId=planDtos.SubSystemId });
+            return Ok(planDtos);
+        }
+
+        [HttpPost("saveallplan")]
+        public IActionResult saveallplan(IEnumerable<Plan> planDtos)
+        {
+            
+            _unitWork.Plans.saveall(planDtos);
+            return Ok(planDtos);
         }
 
         

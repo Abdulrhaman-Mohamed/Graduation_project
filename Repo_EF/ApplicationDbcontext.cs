@@ -41,6 +41,7 @@ namespace Repo_EF
             // Plan 
             modelBuilder.Entity<Plan>()
                 .HasKey(c => new { c.Id, c.SequenceNumber });
+            
 
             modelBuilder.Entity<Plan>().HasOne(o => o.Command)
                 .WithMany(o => o.Plans)

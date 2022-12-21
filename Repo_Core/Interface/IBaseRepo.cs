@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repo_Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,6 +19,12 @@ namespace Repo_Core.Interface
         IEnumerable<T> GetWithInclude(string [] include1);
 
         IEnumerable<T> Getplan(Expression<Func<T, bool>> planid, string [] include);
+
+        T SavePlan(T plan);
+
+        IEnumerable<Plan> saveall(IEnumerable<Plan> plans);
+
+
 
 
         
