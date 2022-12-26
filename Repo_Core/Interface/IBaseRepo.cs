@@ -12,22 +12,23 @@ namespace Repo_Core.Interface
     {
         IEnumerable<T> GetListOf();
 
-        IEnumerable<T> GetListbyid(Expression<Func<T , bool>> id);
+        IEnumerable<T> GetListbyid(Expression<Func<T, bool>> id);
 
-        IEnumerable<T> GetListwithTwoParamter (Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId);
+        IEnumerable<T> GetListWithTwoParamter(Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId);
 
-        IEnumerable<T> GetWithInclude(string [] include1);
+        IEnumerable<T> GetWithInclude(string[] include1);
 
-        IEnumerable<T> Getplan(Expression<Func<T, bool>> planid, string [] include);
+        IEnumerable<T> GetPlan(Expression<Func<T, bool>> planId, string[]? include = null);
+        T GetPlayBack(Expression<Func<T, bool>> match, string[]? include = null);
 
         T SavePlan(T plan);
 
-        IEnumerable<Plan> saveall(IEnumerable<Plan> plans);
+        IEnumerable<Plan> saveAll(IEnumerable<Plan> plans);
 
 
 
 
-        
+
 
 
 

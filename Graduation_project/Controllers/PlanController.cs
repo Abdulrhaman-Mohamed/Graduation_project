@@ -51,7 +51,7 @@ namespace Graduation_project.Controllers
                 return BadRequest();
 
             var values = _unitWork.CommandParams.
-                GetListwithTwoParamter(o => o.SubSystemId == subid, o => o.CommandId == commandid);
+                GetListWithTwoParamter(o => o.SubSystemId == subid, o => o.CommandId == commandid);
 
 
             List<ParamType> ParamType = new List<ParamType>();  
@@ -112,7 +112,7 @@ namespace Graduation_project.Controllers
         public IActionResult saveallplan(IEnumerable<Plan> planDtos)
         {
             
-            _unitWork.Plans.saveall(planDtos);
+            _unitWork.Plans.saveAll(planDtos);
             return Ok(planDtos);
         }
 

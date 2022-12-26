@@ -15,7 +15,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Repo_EF.Repo_Method
 {
-    public class BaseMethodes<T> : IBaseRepo<T> where  T : class    
+    public class BaseMethodes<T> : IBaseRepo<T> where T : class
     {
         protected ApplicationDbContext Context { get; set; }
         public BaseMethodes(ApplicationDbContext context)
@@ -28,18 +28,18 @@ namespace Repo_EF.Repo_Method
         public IEnumerable<T> GetListbyid(Expression<Func<T, bool>> id)
         {
             var Query = Context.Set<T>().Where(id).ToList();
-             
+
             return Query;
         }
 
-        
+
         //GET List By Two Paramters
-        public IEnumerable<T> GetListwithTwoParamter(Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId)
+        public IEnumerable<T> GetListWithTwoParamter(Expression<Func<T, bool>> Subid, Expression<Func<T, bool>> CommandId)
         {
             return Context.Set<T>().Where(Subid).
                 Where(CommandId).ToList();
         }
-        
+
         public IEnumerable<T> GetWithInclude(string[] include)
         {
             IQueryable<T> Query = Context.Set<T>();
@@ -52,18 +52,28 @@ namespace Repo_EF.Repo_Method
 
         }
 
-        public IEnumerable<T> Getplan(Expression<Func<T, bool>> planid, string[] include)
+        public IEnumerable<T> GetPlan(Expression<Func<T, bool>> planId, string[]? include = null)
         {
-            IQueryable<T> Query = Context.Set<T>();
+            IQueryable<T> query = Context.Set<T>();
 
-            if (!include.Equals(null))
+            if (include != null)
                 foreach (var value in include)
-                    Query = Query.Include(value);
+                    query = query.Include(value);
 
-
-
-            return Query.Where(planid).ToList();
+            return query.Where(planId).ToList();
         }
+
+        public T GetPlayBack(Expression<Func<T, bool>> match, string[]? include = null)
+        {
+            IQueryable<T> query = Context.Set<T>();
+
+            if (include != null)
+                foreach (var value in include)
+                    query = query.Include(value);
+
+            return query.FirstOrDefault(match);
+        }
+
 
         public T SavePlan(T plan)
         {
@@ -73,13 +83,12 @@ namespace Repo_EF.Repo_Method
             return plan;
         }
 
-        public IEnumerable<Plan> saveall(IEnumerable<Plan> plan )
+        public IEnumerable<Plan> saveAll(IEnumerable<Plan> plan)
         {
             IQueryable<Plan> Query = Context.Plans;
-            foreach(Plan value in plan)
-            {
-                value.Id = Query.AsEnumerable().Last().Id + 1; 
-            }
+            foreach (Plan value in plan)
+                value.Id = Query.AsEnumerable().Last().Id + 1;
+
             Context.Plans.AddRange(plan);
             Context.SaveChanges();
 

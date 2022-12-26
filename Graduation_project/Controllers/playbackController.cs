@@ -14,14 +14,23 @@ namespace Graduation_project.Controllers
         {
             _unitWork = unitWork;
         }
-        [HttpPost("Getplan")]
-        public IActionResult Getplan(int ID)
+
+        [HttpGet("GetPlan")]
+        public IActionResult GetPlan(int id)
         {
 
-            
+            return Ok(_unitWork.Plans.GetPlan(o => o.Id == id,
+                    new[] { "Command", "Command.SubSystem" })
+                .Select(o => new { o.SequenceNumber, o.AckId, o.Command?.SubSystem?.SubSystemName, o.Command?.Description }));
+        }
+        [HttpGet("GetPlayBack")]
+        public IActionResult GetPlayBack(int id)
+        {
 
-            return Ok(_unitWork.Plans.Getplan(o => o.Id == ID, new[] { "Command", "Command.SubSystem" })
-                .Select(o=> new {o.SequenceNumber , o.AckId , o.Command.SubSystem.SubSystemName, o.Command.Description }));
+            return Ok(_unitWork.PlanResults.GetPlayBack(
+                o => o.Id == id,
+                    new[] { "Plan" }
+                ));
         }
 
     }

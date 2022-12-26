@@ -9,7 +9,7 @@ namespace Repo_Core
     {
 
         int Complete();
-        IRegsiter<Register> Regsiters { get;  }
+        IRegsiter<Register> Regsiters { get; }
 
         IBaseRepo<SubSystem> SubSystems { get; }
 
@@ -20,6 +20,7 @@ namespace Repo_Core
 
         IBaseRepo<ParamValue> ParamValues { get; }
         IBaseRepo<Plan> Plans { get; }
+        IBaseRepo<PlanResult> PlanResults { get; }
 
 
 
