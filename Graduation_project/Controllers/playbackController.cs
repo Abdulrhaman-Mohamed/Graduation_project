@@ -28,7 +28,7 @@ namespace Graduation_project.Controllers
         {
 
             return Ok(_unitWork.PlanResults.GetPlayBack(
-                o => o.Id == id,
+                o => o.PlanId == id,
                     new[] { "Plan" }
                 ));
         }
