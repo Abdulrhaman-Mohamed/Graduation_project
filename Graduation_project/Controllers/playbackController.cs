@@ -16,21 +16,20 @@ namespace Graduation_project.Controllers
         }
 
         [HttpGet("GetPlan")]
-        public IActionResult GetPlan(int id)
-        {
+        //public IActionResult GetPlan(int id)
+        //{
 
-            return Ok(_unitWork.Plans.GetPlan(o => o.Id == id,
-                    new[] { "Command", "Command.SubSystem" })
-                .Select(o => new { o.SequenceNumber, o.AckId, o.Command?.SubSystem?.SubSystemName, o.Command?.Description }));
-        }
+        //    return Ok();
+        //}
         [HttpGet("GetPlayBack")]
-        public IActionResult GetPlayBack(int id)
+        public   IActionResult GetPlayBack(int id)
         {
-
-            return Ok(_unitWork.PlanResults.GetPlayBack(
-                o => o.PlanId == id,
-                    new[] { "Plan" }
-                ));
+           var plan  =  _unitWork.Plans.GetPlan(o => o.Id == id,
+                    new[] { "Command", "Command.SubSystem" })
+                .Select(o => new { o.SequenceNumber, o.AckId, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
+            var result = _unitWork.PlanResults.GetListbyid(o => o.PlanId == id);
+            return Ok(new { plan, result });
+                
         }
 
     }

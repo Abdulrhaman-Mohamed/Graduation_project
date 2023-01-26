@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Repo_Core.Interface;
 using Repo_Core.Models;
 using System;
@@ -25,11 +26,11 @@ namespace Repo_EF.Repo_Method
         // use to get list of any class of model like (Subsystem or commands or any class)
         public IEnumerable<T> GetListOf() => Context.Set<T>().ToList();
         //GET any thing by id 
-        public IEnumerable<T> GetListbyid(Expression<Func<T, bool>> id)
+         public IEnumerable<T>  GetListbyid(Expression<Func<T, bool>> id)
         {
             var Query = Context.Set<T>().Where(id).ToList();
 
-            return Query;
+              return  Query;
         }
 
 
@@ -52,7 +53,7 @@ namespace Repo_EF.Repo_Method
 
         }
 
-        public IEnumerable<T> GetPlan(Expression<Func<T, bool>> planId, string[]? include = null)
+        public  IEnumerable<T> GetPlan(Expression<Func<T, bool>> planId, string[]? include = null)
         {
             IQueryable<T> query = Context.Set<T>();
 
@@ -60,7 +61,7 @@ namespace Repo_EF.Repo_Method
                 foreach (var value in include)
                     query = query.Include(value);
 
-            return query.Where(planId).ToList();
+            return  query.Where(planId).ToList();
         }
 
         public T GetPlayBack(Expression<Func<T, bool>> match, string[]? include = null)
@@ -71,7 +72,7 @@ namespace Repo_EF.Repo_Method
                 foreach (var value in include)
                     query = query.Include(value);
 
-            return query.FirstOrDefault(match);
+            return  query.FirstOrDefault(match);
         }
 
 

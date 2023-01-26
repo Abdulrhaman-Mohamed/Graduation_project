@@ -24,17 +24,17 @@ namespace Graduation_project.Controllers
             
         }
 
-        [HttpGet]   
-        public IActionResult GetbyId(int id)
-        {
-            return Ok(_unitWork.Regsiters.GetUser( id));
-        }
+        //[HttpGet]   
+        //public IActionResult GetbyId(int id)
+        //{
+        //    return Ok(_unitWork.Regsiters.GetUser( id));
+        //}
 
-        [HttpPost("NewRegsiter")] 
-        public  IActionResult Regsiter()
-        {
-            return Ok(_unitWork.Regsiters.Regsiter(new Register { Name = "GG", Password = "sadada2121", PhoneNumber = 0145145, Age = 33, Email = "sdadad" }));
-        }
+        //[HttpPost("NewRegsiter")] 
+        //public  IActionResult Regsiter()
+        //{
+        //    return Ok(_unitWork.Regsiters.Regsiter(new Register { Name = "GG", Password = "sadada2121", PhoneNumber = 0145145, Age = 33, Email = "sdadad" }));
+        //}
 
         [HttpPost("AuthRegsiter")]
         public async Task<IActionResult> RegisterAsync([FromBody]RegsiterUserModel model)
