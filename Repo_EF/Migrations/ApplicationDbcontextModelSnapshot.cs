@@ -137,14 +137,14 @@ namespace Repo_EF.Migrations
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("AckId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("AcknowledgeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Delay")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Divces")
+                        .HasColumnType("int");
 
                     b.Property<string>("Repeat")
                         .HasColumnType("nvarchar(max)");
@@ -154,6 +154,15 @@ namespace Repo_EF.Migrations
 
                     b.Property<int>("commandID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("inputParamter")
+                        .HasColumnType("int");
+
+                    b.Property<string>("namePlan")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id", "SequenceNumber");
 
@@ -267,6 +276,50 @@ namespace Repo_EF.Migrations
                     b.ToTable("Subsystems");
                 });
 
+            modelBuilder.Entity("Repo_Core.Models.WaittingPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AcknowledgeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Delay")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Divces")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Repeat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("commandID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("inputParamter")
+                        .HasColumnType("int");
+
+                    b.Property<string>("namePlan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id", "SequenceNumber");
+
+                    b.HasIndex("AcknowledgeId");
+
+                    b.HasIndex("commandID", "SubSystemId");
+
+                    b.ToTable("WaittingPlans");
+                });
+
             modelBuilder.Entity("SatelliteStation", b =>
                 {
                     b.Property<int>("SatellitesId")
@@ -362,6 +415,23 @@ namespace Repo_EF.Migrations
                     b.Navigation("Satellite");
                 });
 
+            modelBuilder.Entity("Repo_Core.Models.WaittingPlan", b =>
+                {
+                    b.HasOne("Repo_Core.Models.Acknowledge", "Acknowledge")
+                        .WithMany()
+                        .HasForeignKey("AcknowledgeId");
+
+                    b.HasOne("Repo_Core.Models.Command", "Command")
+                        .WithMany("WaittingPlans")
+                        .HasForeignKey("commandID", "SubSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Acknowledge");
+
+                    b.Navigation("Command");
+                });
+
             modelBuilder.Entity("SatelliteStation", b =>
                 {
                     b.HasOne("Repo_Core.Models.Satellite", null)
@@ -382,6 +452,8 @@ namespace Repo_EF.Migrations
                     b.Navigation("CommandParams");
 
                     b.Navigation("Plans");
+
+                    b.Navigation("WaittingPlans");
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>

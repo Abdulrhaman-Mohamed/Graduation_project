@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Core;
@@ -67,7 +68,7 @@ namespace Graduation_project.Controllers
         //    }
         //    return Ok("No Paramters");           
         //}
-
+        [EnableCors]
         [HttpGet("GetAllSubsystem_Commands")]
         public IActionResult GetAllSubsystem_Commands()
         {

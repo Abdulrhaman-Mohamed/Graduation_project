@@ -26,7 +26,7 @@ namespace Graduation_project.Controllers
         {
            var plan  =  _unitWork.Plans.GetPlan(o => o.Id == id,
                     new[] { "Command", "Command.SubSystem" })
-                .Select(o => new { o.SequenceNumber, o.AckId, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
+                .Select(o => new { o.SequenceNumber, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
             var result = _unitWork.PlanResults.GetListbyid(o => o.PlanId == id);
             return Ok(new { plan, result });
                 
