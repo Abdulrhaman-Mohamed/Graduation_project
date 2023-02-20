@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Repo_EF\Repo_EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+
 </Project>
