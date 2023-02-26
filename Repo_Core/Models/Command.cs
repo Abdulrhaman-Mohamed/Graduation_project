@@ -22,7 +22,7 @@ namespace Repo_Core.Models
         public virtual List<Plan>? Plans { get; set; }
         public virtual List<CommandParam>? CommandParams { get; set; }
 
-        public virtual List<WaittingPlan>? WaittingPlans { get; set; }
+        
 
 
     }

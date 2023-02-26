@@ -31,7 +31,7 @@ namespace Repo_Core.Models
 
         public DateTime dateTime { get; set; }
 
-        public string? namePlan { get; set; }
+        public bool? FlagWatting { get; set; }
 
     }
 }

@@ -23,7 +23,7 @@ namespace Repo_EF
         public virtual DbSet<Satellite> Satellites { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<SubSystem> Subsystems { get; set; }
-        public virtual DbSet<WaittingPlan> WaittingPlans { get; set; }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,12 +79,7 @@ namespace Repo_EF
 
             modelBuilder.Entity<ParamValue>().HasKey(c => new { c.Id, c.SubSystemID, c.CommandID, c.CommandParamID });
 
-            //WaittingPlan
-            modelBuilder.Entity<WaittingPlan>().HasKey(x => new { x.Id , x .SequenceNumber });
-
-            modelBuilder.Entity<WaittingPlan>().HasOne(o => o.Command)
-                .WithMany(o => o.WaittingPlans)
-                .HasForeignKey(o => new { o.commandID, o.SubSystemId });
+            
 
             
                 

@@ -15,7 +15,7 @@ namespace Graduation_project.Controllers
             _unitWork = unitWork;
         }
 
-        [HttpGet("GetPlan")]
+        
         //public IActionResult GetPlan(int id)
         //{
 
@@ -31,6 +31,12 @@ namespace Graduation_project.Controllers
             return Ok(new { plan, result });
                 
         }
+
+
+        // Plan By Time
+        // describe when user put Date Only to serach about plan 
+        //then return list of the plans has been save in that day 
+        // when chose one plan return it result 
 
     }
 }

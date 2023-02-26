@@ -30,5 +30,7 @@ namespace Identity.Model
 
         [Required , StringLength(15)]
         public string NumberPhone { get; set; }
+
+        
     }
 }

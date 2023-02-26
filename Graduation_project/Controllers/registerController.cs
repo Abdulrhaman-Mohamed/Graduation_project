@@ -24,18 +24,6 @@ namespace Graduation_project.Controllers
             
         }
 
-        //[HttpGet]   
-        //public IActionResult GetbyId(int id)
-        //{
-        //    return Ok(_unitWork.Regsiters.GetUser( id));
-        //}
-
-        //[HttpPost("NewRegsiter")] 
-        //public  IActionResult Regsiter()
-        //{
-        //    return Ok(_unitWork.Regsiters.Regsiter(new Register { Name = "GG", Password = "sadada2121", PhoneNumber = 0145145, Age = 33, Email = "sdadad" }));
-        //}
-
         [HttpPost("AuthRegsiter")]
         public async Task<IActionResult> RegisterAsync([FromBody]RegsiterUserModel model)
         {
@@ -78,6 +66,10 @@ namespace Graduation_project.Controllers
 
             return Ok(new  {Message= $"You are {model.Role} Now" });
         }
+
+
+
+        // edit setting of user profile like his name or password and etc .....
 
 
     }

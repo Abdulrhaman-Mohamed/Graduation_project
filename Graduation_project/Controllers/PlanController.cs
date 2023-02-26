@@ -108,6 +108,16 @@ namespace Graduation_project.Controllers
             return Ok(planDtos);
         }
 
+
+        //Online & Execute
+
+
+
+        //Defult Plan
+
+
+        //Custom Plan
+
         
 
 
