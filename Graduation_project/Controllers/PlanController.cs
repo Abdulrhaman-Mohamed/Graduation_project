@@ -1,4 +1,6 @@
-﻿using Castle.Core.Internal;
+﻿using AutoMapper;
+using Castle.Core.Internal;
+using Graduation_project.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +20,13 @@ namespace Graduation_project.Controllers
         private readonly IUnitWork _unitWork;
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public PlanController(IUnitWork unitWork, ApplicationDbContext dbContext)
+        public PlanController(IUnitWork unitWork, ApplicationDbContext dbContext , IMapper mapper)
         {
             _unitWork = unitWork;
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         //[HttpGet("GetAllSubsystem")]
@@ -100,16 +104,29 @@ namespace Graduation_project.Controllers
         //    return Ok(planDtos);
         //}
 
-        [HttpPost("saveallplan")]
-        public IActionResult saveallplan(IEnumerable<Plan> planDtos)
-        {
-            
-            _unitWork.Plans.saveAll(planDtos);
-            return Ok(planDtos);
-        }
+
+
 
 
         //Online & Execute
+        [HttpPost("saveallplan")]
+        public IActionResult saveallplan(IEnumerable<PlanDots> planDtos , char flag)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var plan = _mapper.Map<IEnumerable<Plan>>(planDtos);
+
+                _unitWork.Plans.saveAll(plan , flag);
+                return Ok(planDtos);
+            
+
+
+            return BadRequest();
+        }
+
+
+        
+        
 
 
 
@@ -118,7 +135,7 @@ namespace Graduation_project.Controllers
 
         //Custom Plan
 
-        
+
 
 
 

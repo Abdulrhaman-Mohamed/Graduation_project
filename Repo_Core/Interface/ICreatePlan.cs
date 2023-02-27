@@ -8,6 +8,7 @@ namespace Repo_Core.Interface
 {
     public interface ICreatePlan
     {
+        
 
     }
 }

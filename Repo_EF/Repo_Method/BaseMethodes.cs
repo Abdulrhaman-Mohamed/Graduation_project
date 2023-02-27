@@ -76,19 +76,17 @@ namespace Repo_EF.Repo_Method
         }
 
 
-        public T SavePlan(T plan)
-        {
-            Context.Set<T>().Add(plan);
-            Context.SaveChanges();
+       
 
-            return plan;
-        }
-
-        public IEnumerable<Plan> saveAll(IEnumerable<Plan> plan)
+        public IEnumerable<Plan> saveAll(IEnumerable<Plan> plan , char flag)
         {
             IQueryable<Plan> Query = Context.Plans;
+            bool waitting = flag == 'T' ? true : false; 
             foreach (Plan value in plan)
+            {
+                value.FlagWatting = waitting;
                 value.Id = Query.AsEnumerable().Last().Id + 1;
+            }
 
             Context.Plans.AddRange(plan);
             Context.SaveChanges();

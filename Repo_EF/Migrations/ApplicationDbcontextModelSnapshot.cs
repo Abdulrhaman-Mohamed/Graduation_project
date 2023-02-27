@@ -38,7 +38,7 @@ namespace Repo_EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Acknowledges");
+                    b.ToTable("Acknowledges", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Command", b =>
@@ -59,7 +59,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("SubSystemId");
 
-                    b.ToTable("Commands");
+                    b.ToTable("Commands", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.CommandParam", b =>
@@ -82,7 +82,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("CommandId", "SubSystemId");
 
-                    b.ToTable("CommandParams");
+                    b.ToTable("CommandParams", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.ParamType", b =>
@@ -99,7 +99,7 @@ namespace Repo_EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ParamTypes");
+                    b.ToTable("ParamTypes", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.ParamValue", b =>
@@ -126,7 +126,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("CommandParamID", "CommandID", "SubSystemID");
 
-                    b.ToTable("ParamValues");
+                    b.ToTable("ParamValues", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Plan", b =>
@@ -170,7 +170,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("commandID", "SubSystemId");
 
-                    b.ToTable("Plans");
+                    b.ToTable("Plans", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.PlanResult", b =>
@@ -194,7 +194,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("PlanId", "PlanSequenceNumber");
 
-                    b.ToTable("PlanResults");
+                    b.ToTable("PlanResults", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Satellite", b =>
@@ -222,7 +222,7 @@ namespace Repo_EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Satellites");
+                    b.ToTable("Satellites", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Station", b =>
@@ -249,7 +249,7 @@ namespace Repo_EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stations");
+                    b.ToTable("Stations", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.SubSystem", b =>
@@ -273,7 +273,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("SatelliteId");
 
-                    b.ToTable("Subsystems");
+                    b.ToTable("Subsystems", (string)null);
                 });
 
             modelBuilder.Entity("SatelliteStation", b =>
@@ -288,7 +288,7 @@ namespace Repo_EF.Migrations
 
                     b.HasIndex("StationsId");
 
-                    b.ToTable("SatelliteStation");
+                    b.ToTable("SatelliteStation", (string)null);
                 });
 
             modelBuilder.Entity("Repo_Core.Models.Command", b =>
