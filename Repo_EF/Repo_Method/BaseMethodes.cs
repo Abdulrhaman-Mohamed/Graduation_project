@@ -78,10 +78,24 @@ namespace Repo_EF.Repo_Method
 
        
 
-        public IEnumerable<Plan> saveAll(IEnumerable<Plan> plan , char flag)
+        public string saveAll(IEnumerable<Plan> plan , byte flag)
         {
             IQueryable<Plan> Query = Context.Plans;
-            bool waitting = flag == 'T' ? true : false; 
+            bool waitting = flag == 1 ? true : false;
+            if (waitting is false)
+            {
+                
+                var time = plan.FirstOrDefault().dateTime;
+                var check = Query.Where(x => x.FlagWatting == false).ToList();
+                int count = check.DistinctBy(x => x.Id).Count();
+                if (count > 6)
+                    return "There are more than 5 Plans doesn't Execute";
+
+                var nearest = check.MinBy(x => Math.Abs((x.dateTime - time).TotalSeconds));
+                if(Math.Abs((nearest.dateTime - time).TotalMinutes) <= 30)
+                    return "Can't create This Plan Because There are Plans whose time near this plan";               
+                
+            }
             foreach (Plan value in plan)
             {
                 value.FlagWatting = waitting;
@@ -91,7 +105,7 @@ namespace Repo_EF.Repo_Method
             Context.Plans.AddRange(plan);
             Context.SaveChanges();
 
-            return plan;
+            return "Save Successful";
         }
     }
 }

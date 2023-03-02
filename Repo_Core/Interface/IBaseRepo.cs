@@ -24,7 +24,7 @@ namespace Repo_Core.Interface
 
         
 
-        IEnumerable<Plan> saveAll(IEnumerable<Plan> plans , char flag );
+        string saveAll(IEnumerable<Plan> plans , byte flag );
 
 
 

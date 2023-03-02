@@ -110,30 +110,35 @@ namespace Graduation_project.Controllers
 
         //Online & Execute
         [HttpPost("saveallplan")]
-        public IActionResult saveallplan(IEnumerable<PlanDots> planDtos , char flag)
+        public IActionResult saveallplan(IEnumerable<PlanDots> planDtos , byte flag)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
             var plan = _mapper.Map<IEnumerable<Plan>>(planDtos);
 
-                _unitWork.Plans.saveAll(plan , flag);
-                return Ok(planDtos);
+              string result =  _unitWork.Plans.saveAll(plan , flag);
+            if(result.Length<16)
+                return Ok(result);
             
+            return BadRequest(result);
+        }
 
 
-            return BadRequest();
+
+
+
+
+
+        //Defult Plan & Custom Plan
+        [HttpGet("Return plan")]
+        public IActionResult getPlan(int id)
+        {
+            return Ok(_unitWork.Plans.GetPlan(x=> x.Id == id));
         }
 
 
         
-        
 
-
-
-        //Defult Plan
-
-
-        //Custom Plan
 
 
 

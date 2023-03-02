@@ -47,6 +47,9 @@ namespace Repo_EF
             modelBuilder.Entity<Plan>().HasOne(o => o.Command)
                 .WithMany(o => o.Plans)
                 .HasForeignKey(o => new { o.commandID, o.SubSystemId });
+
+            modelBuilder.Entity<Plan>().HasIndex(x => x.FlagWatting)
+                .HasFilter("[FlagWatting] IS False");
                 
 
 
