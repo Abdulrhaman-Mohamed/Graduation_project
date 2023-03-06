@@ -15,7 +15,9 @@ namespace Identity
     {
         public UserDbcontext(DbContextOptions<UserDbcontext> options) : base(options)
         {
+
         }
         public virtual DbSet<Posts> Posts { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
     }
 }

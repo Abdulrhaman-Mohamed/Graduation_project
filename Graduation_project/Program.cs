@@ -14,6 +14,7 @@ using System.Text;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
+using Identity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
 builder.Services.AddTransient<IUnitWork, UnitWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEditting, EdittingServices>();
 
 builder.Services.AddAuthentication(option =>
 {

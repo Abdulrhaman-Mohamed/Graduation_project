@@ -18,5 +18,7 @@ namespace Identity.Model
         
         public virtual ApplicationUser? User { get; set; }
 
+        public IEnumerable<Feedback>? feedback { get; set; }
+
     }
 }

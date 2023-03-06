@@ -4,6 +4,7 @@ using Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Migrations
 {
     [DbContext(typeof(UserDbcontext))]
-    partial class UserDbcontextModelSnapshot : ModelSnapshot
+    [Migration("20230304205335_Feedback")]
+    partial class Feedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,6 @@ namespace Identity.Migrations
                     b.Property<int?>("PostIdid")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserIdId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,9 +46,7 @@ namespace Identity.Migrations
 
                     b.HasIndex("PostIdid");
 
-                    b.HasIndex("UserIdId");
-
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("Identity.Model.Posts", b =>
@@ -296,13 +293,7 @@ namespace Identity.Migrations
                         .WithMany("feedback")
                         .HasForeignKey("PostIdid");
 
-                    b.HasOne("Identity.Models.ApplicationUser", "UserId")
-                        .WithMany()
-                        .HasForeignKey("UserIdId");
-
                     b.Navigation("PostId");
-
-                    b.Navigation("UserId");
                 });
 
             modelBuilder.Entity("Identity.Model.Posts", b =>

@@ -23,6 +23,7 @@ namespace Repo_EF.Repo_Method
         public T Regsiter(T info)
         {
             _DbContext.Set<T>().Add(info);
+            
             _DbContext.SaveChanges();
             return info;
             

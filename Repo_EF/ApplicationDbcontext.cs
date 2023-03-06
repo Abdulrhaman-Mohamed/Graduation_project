@@ -29,7 +29,7 @@ namespace Repo_EF
         {
             // Station 
             modelBuilder.Entity<Station>().HasKey(c => new { c.Id });
-
+            
             // SubSystem
             modelBuilder.Entity<SubSystem>().HasKey(c => new { c.Id });
 
