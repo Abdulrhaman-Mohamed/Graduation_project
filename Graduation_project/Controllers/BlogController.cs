@@ -27,7 +27,7 @@ namespace Graduation_project.Controllers
         }
 
         [HttpPut("Editting")]
-        public async Task  <IActionResult> Editting( Editting info)
+        public async Task  <IActionResult> Editting([FromBody] Editting info)
         {
            var map= _mapper.Map<ApplicationUser>(info);
            await _editting.Editting(map);
@@ -36,7 +36,7 @@ namespace Graduation_project.Controllers
         }
 
         [HttpPost("Feedback")]
-        public IActionResult Addfeedback(FeedbackView feedback)
+        public IActionResult Addfeedback([FromBody] FeedbackView feedback)
         {
             var feedback1 = _mapper.Map<Feedback>(feedback);
             
