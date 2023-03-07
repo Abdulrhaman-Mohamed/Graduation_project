@@ -26,6 +26,8 @@ namespace Graduation_project.Controllers
            
         }
 
+
+        //Edit Setting of User (Not Fixed) 
         [HttpPut("Editting")]
         public async Task  <IActionResult> Editting([FromBody] Editting info)
         {
@@ -34,14 +36,12 @@ namespace Graduation_project.Controllers
 
             return Ok();
         }
-
+        //Feedback : Can user add feedback or comment in blogs
         [HttpPost("Feedback")]
         public IActionResult Addfeedback([FromBody] FeedbackView feedback)
         {
             var feedback1 = _mapper.Map<Feedback>(feedback);
-            
-            _editting.Addfeedback(feedback1);
-            return Ok();
+            return Ok(_editting.Addfeedback(feedback1));
         }
 
 
@@ -60,7 +60,7 @@ namespace Graduation_project.Controllers
 
 
 
-            //Feedback : Can user add feedback or comment in blogs
+            
 
 
 

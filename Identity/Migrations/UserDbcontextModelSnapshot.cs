@@ -30,10 +30,11 @@ namespace Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("PostIdid")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserIdId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("comment")
@@ -45,11 +46,11 @@ namespace Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostIdid");
+                    b.HasIndex("PostId");
 
-                    b.HasIndex("UserIdId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("Identity.Model.Posts", b =>
@@ -60,7 +61,10 @@ namespace Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("postContent")
@@ -77,7 +81,7 @@ namespace Identity.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Posts");
                 });
@@ -292,24 +296,28 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Model.Feedback", b =>
                 {
-                    b.HasOne("Identity.Model.Posts", "PostId")
+                    b.HasOne("Identity.Model.Posts", "Post")
                         .WithMany("feedback")
-                        .HasForeignKey("PostIdid");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Identity.Models.ApplicationUser", "UserId")
+                    b.HasOne("Identity.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserIdId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("PostId");
+                    b.Navigation("Post");
 
-                    b.Navigation("UserId");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Identity.Model.Posts", b =>
                 {
                     b.HasOne("Identity.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

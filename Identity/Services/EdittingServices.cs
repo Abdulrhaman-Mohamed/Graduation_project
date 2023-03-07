@@ -38,9 +38,9 @@ namespace Identity.Services
         public string Addfeedback(Feedback feed)
         {
             
-            _DbContext.Set<Feedback>().AddAsync(feed);
+            _DbContext.Feedbacks.Add(feed);
 
-            _DbContext.SaveChangesAsync();
+            _DbContext.SaveChanges();
             return "Success"; 
         }
 

@@ -14,8 +14,10 @@ namespace Identity.Model
         public string comment { get; set; }
 
         public DateTime feedbacktime { get; set; }
+        public string UserId { get; set; }
+        public virtual ApplicationUser? User { get; set; }
 
-        public virtual ApplicationUser? UserId { get; set; }
-        public virtual Posts? PostId { get; set; }
+        public int PostId { get; set; }
+        public virtual Posts? Post { get; set; }
     }
 }
