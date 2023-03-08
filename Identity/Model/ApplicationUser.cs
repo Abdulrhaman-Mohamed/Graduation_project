@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Identity.Model;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,9 @@ namespace Identity.Models
         public string FirstName { get; set; }
         [Required, MaxLength(50)]
         public string LastName { get; set; }
-      
+
+        public virtual IEnumerable<Feedback>? Feedbacks { get; set; }
+        public virtual IEnumerable<Posts>? Posts { get; set; }
+
     }
 }

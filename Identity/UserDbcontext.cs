@@ -19,5 +19,32 @@ namespace Identity
         }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            base.OnModelCreating(modelBuilder);
+
+
+            //feedback
+            modelBuilder.Entity<Feedback>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Feedback>()
+                .HasOne(o => o.User)
+                .WithMany(o=> o.Feedbacks);
+
+            modelBuilder.Entity<Feedback>()
+                .HasOne(o => o.Post)
+                .WithMany(o => o.feedback);
+
+
+            //posts
+            modelBuilder.Entity<Posts>()
+                .HasOne(o => o.User)
+                .WithMany(o => o.Posts);
+                
+
+        }
     }
 }

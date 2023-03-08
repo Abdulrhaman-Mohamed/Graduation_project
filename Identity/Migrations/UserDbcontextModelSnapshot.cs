@@ -61,10 +61,8 @@ namespace Identity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("postContent")
@@ -81,7 +79,7 @@ namespace Identity.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -303,7 +301,7 @@ namespace Identity.Migrations
                         .IsRequired();
 
                     b.HasOne("Identity.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -316,8 +314,10 @@ namespace Identity.Migrations
             modelBuilder.Entity("Identity.Model.Posts", b =>
                 {
                     b.HasOne("Identity.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -376,6 +376,13 @@ namespace Identity.Migrations
             modelBuilder.Entity("Identity.Model.Posts", b =>
                 {
                     b.Navigation("feedback");
+                });
+
+            modelBuilder.Entity("Identity.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

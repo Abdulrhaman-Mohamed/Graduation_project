@@ -15,7 +15,7 @@ namespace Identity.Model
 
         public DateTime postDate { get; set; }
         public string? postImages { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public virtual ApplicationUser? User { get; set; }
 
         public IEnumerable<Feedback>? feedback { get; set; }
