@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Graduation_project.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Core;
 
@@ -15,28 +16,28 @@ namespace Graduation_project.Controllers
             _unitWork = unitWork;
         }
 
-        
-        //public IActionResult GetPlan(int id)
-        //{
 
-        //    return Ok();
-        //}
         [HttpGet("GetPlayBack")]
-        public   IActionResult GetPlayBack(int id)
+        public IActionResult GetPlayBack(int id)
         {
-           var plan  =  _unitWork.Plans.GetPlan(o => o.Id == id,
-                    new[] { "Command", "Command.SubSystem" })
-                .Select(o => new { o.SequenceNumber, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
+            var plan = _unitWork.Plans.GetPlan(o => o.Id == id,
+                     new[] { "Command", "Command.SubSystem" })
+                 .Select(o => new { o.SequenceNumber, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
             var result = _unitWork.PlanResults.GetListbyid(o => o.PlanId == id);
             return Ok(new { plan, result });
-                
+
         }
 
+        [HttpGet("GetByDate")]
+        public IActionResult GetPlanResultByDate(int year, int month, int day)
+        {
 
-        // Plan By Time
-        // describe when user put Date Only to serach about plan 
-        //then return list of the plans has been save in that day 
-        // when chose one plan return it result 
+            if (!Util.IsValidDate(year, month, day))
+                return BadRequest(new { message = "Invalid input" });
 
+            var date = new DateTime(year, month, day);
+            var plans = _unitWork.Playback.GetByDate(date);
+            return Ok(new { plans });
+        }
     }
 }

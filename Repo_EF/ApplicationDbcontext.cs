@@ -5,7 +5,7 @@ using Repo_Core.Models;
 
 namespace Repo_EF
 {
-    public class ApplicationDbContext : DbContext  
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -23,13 +23,13 @@ namespace Repo_EF
         public virtual DbSet<Satellite> Satellites { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<SubSystem> Subsystems { get; set; }
-       
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Station 
             modelBuilder.Entity<Station>().HasKey(c => new { c.Id });
-            
+
             // SubSystem
             modelBuilder.Entity<SubSystem>().HasKey(c => new { c.Id });
 
@@ -42,15 +42,15 @@ namespace Repo_EF
             // Plan 
             modelBuilder.Entity<Plan>()
                 .HasKey(c => new { c.Id, c.SequenceNumber });
-            
+
 
             modelBuilder.Entity<Plan>().HasOne(o => o.Command)
                 .WithMany(o => o.Plans)
-                .HasForeignKey(o => new { o.commandID, o.SubSystemId });
+                .HasForeignKey(o => new { commandID = o.CommandId, o.SubSystemId });
 
             modelBuilder.Entity<Plan>().HasIndex(x => x.FlagWatting)
                 .HasFilter("[FlagWatting] IS False");
-                
+
 
 
             // PlanResult 
@@ -82,10 +82,10 @@ namespace Repo_EF
 
             modelBuilder.Entity<ParamValue>().HasKey(c => new { c.Id, c.SubSystemID, c.CommandID, c.CommandParamID });
 
-            
 
-            
-                
+
+
+
 
 
 

@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace Repo_Core.Models
 {
-    
+
     public class Plan
     {
         [JsonIgnore]
         public int Id { get; set; }
+        public string? Name { get; set; }
         public int SequenceNumber { get; set; }
         public string? Delay { get; set; }
         public string? Repeat { get; set; }
@@ -23,7 +24,7 @@ namespace Repo_Core.Models
         public virtual Acknowledge? Acknowledge { get; set; }
 
         public int SubSystemId { get; set; }
-        public int commandID { get; set; }
+        public int CommandId { get; set; }
         [JsonIgnore]
         public virtual Command? Command { get; set; }
 

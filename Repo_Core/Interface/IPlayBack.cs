@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Repo_Core.Models;
 
 namespace Repo_Core.Interface
 {
     public interface IPlayBack
     {
+        Task<IEnumerable<PlanResult>> GetByDate(DateTime date);
 
     }
 }
