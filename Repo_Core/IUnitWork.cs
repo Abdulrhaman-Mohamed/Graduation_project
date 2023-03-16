@@ -22,6 +22,8 @@ namespace Repo_Core
         IBaseRepo<Plan> Plans { get; }
         IBaseRepo<PlanResult> PlanResults { get; }
 
+        IPlayBack PlayBack { get; }
+
 
 
 

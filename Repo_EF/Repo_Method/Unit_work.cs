@@ -34,6 +34,8 @@ namespace Repo_EF.Repo_Method
         public IBaseRepo<Plan> Plans { get; private set; }
         public IBaseRepo<PlanResult> PlanResults { get; }
 
+        public IPlayBack PlayBack { get; private set; }
+
 
 
 
@@ -50,6 +52,7 @@ namespace Repo_EF.Repo_Method
             ParamValues = new BaseMethodes<ParamValue>(_dbContext);
             Plans = new BaseMethodes<Plan>(_dbContext);
             PlanResults = new BaseMethodes<PlanResult>(_dbContext);
+            PlayBack = new PlayBack(_dbContext);
 
         }
 

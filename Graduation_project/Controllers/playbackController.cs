@@ -36,7 +36,7 @@ namespace Graduation_project.Controllers
                 return BadRequest(new { message = "Invalid input" });
 
             var date = new DateTime(year, month, day);
-            var plans = _unitWork.Playback.GetByDate(date);
+            var plans = _unitWork.PlayBack.GetByDate(date);
             return Ok(new { plans });
         }
     }

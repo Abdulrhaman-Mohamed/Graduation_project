@@ -33,4 +33,8 @@
     <ProjectReference Include="..\Repo_EF\Repo_EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\BlogImages\" />
+  </ItemGroup>
+
 </Project>

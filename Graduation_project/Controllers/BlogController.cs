@@ -44,27 +44,25 @@ namespace Graduation_project.Controllers
             return Ok(_editting.Addfeedback(feedback1));
         }
 
+        
+
+
+        // Note : (There are class name posts in identity in models)
+
+
+        //blogs : return groups of blogs with pagination
+
+
+
+        //Create Blog  : user can add posts / blog of some content
 
 
 
 
 
-            // Note : (There are class name posts in identity in models)
-
-
-            //blogs : return groups of blogs with pagination
-
-
-
-            //Create Blog  : user can add posts / blog of some content
-
-
-
-            
 
 
 
 
-
-        }
+    }
 }
