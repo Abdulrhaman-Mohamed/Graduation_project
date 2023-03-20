@@ -1,68 +1,81 @@
-﻿using Identity;
-using Identity.Migrations;
+﻿using Graduation_project.ViewModel;
 using Identity.Model;
-using Identity.Models;
 using Identity.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Feedback = Identity.Model.Feedback;
-using Graduation_project.ViewModel;
-using Repo_Core.Models;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Repo_Core;
+using System.ComponentModel;
+using System.Net;
+using System.Security.Policy;
+using System.IO;
 
 namespace Graduation_project.Controllers
 {
-    public class BlogController : Controller
+
+    [Route("api/[controller]")]
+    [ApiController]
+    // Note : (There are class name posts in identity in models)
+
+    public class BlogController : ControllerBase
     {
-        
-        private readonly IEditting _editting;
-        private readonly UserDbcontext _dbcontext;
-        private readonly IMapper _mapper;
-        public BlogController(IEditting editting, UserDbcontext dbcontext, IMapper mapper)
+        private readonly IBlogService _blogService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BlogController(IBlogService blogService, IWebHostEnvironment webHostEnvironment)
         {
-            _editting = editting;
-            _dbcontext = dbcontext;
-            _mapper = mapper;
-           
+            _blogService = blogService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-
-        //Edit Setting of User (Not Fixed) 
-        [HttpPut("Editting")]
-        public async Task  <IActionResult> Editting([FromBody] Editting info)
+        [HttpGet("allblogs")]
+        public IActionResult GetPosts(int page, int pageSize)
         {
-           var map= _mapper.Map<ApplicationUser>(info);
-           await _editting.Editting(map);
+            var posts = _blogService.GetPosts(page, pageSize);
+            if (posts == null)
+                return BadRequest("not found");
 
-            return Ok();
+            else
+            {
+
+                return Ok(posts.ToList());
+            }
+
+
+            //var posts = _blogService.GetPosts( page , pageSize);
+            //return Ok(posts.ToList());
+            //"Paging data for page no " + page,
         }
-        //Feedback : Can user add feedback or comment in blogs
-        [HttpPost("Feedback")]
-        public IActionResult Addfeedback([FromBody] FeedbackView feedback)
+
+        [HttpPost("Images")]
+        public async Task<IActionResult> CreateAsync([FromHeader] PostsDtos strm)
         {
-            var feedback1 = _mapper.Map<Feedback>(feedback);
-            return Ok(_editting.Addfeedback(feedback1));
+
+            string filepath = "wwwroot/upload/image.png";
+            var bytess = Convert.FromBase64String(strm.postImages);
+            using (var imageFile = new FileStream(filepath, FileMode.Create))
+            {
+
+                imageFile.Write(bytess, 0, bytess.Length);
+                imageFile.Flush();
+            }
+
+
+            Posts files = new Posts();
+            {
+                files.postTitle = strm.postTitle;
+                files.postImages = filepath;
+                files.postContent = strm.postContent;
+                files.postDate = strm.postDate;
+                files.UserId = strm.UserId;
+            };
+
+            return Ok(_blogService.Add(files));
+
+
         }
-
-        
-
-
-        // Note : (There are class name posts in identity in models)
-
-
-        //blogs : return groups of blogs with pagination
-
-
-
-        //Create Blog  : user can add posts / blog of some content
-
-
-
-
-
-
-
-
 
     }
 }
+
