@@ -22,7 +22,7 @@ namespace Graduation_project.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public PlanController(IUnitWork unitWork, ApplicationDbContext dbContext , IMapper mapper)
+        public PlanController(IUnitWork unitWork, ApplicationDbContext dbContext, IMapper mapper)
         {
             _unitWork = unitWork;
             _dbContext = dbContext;
@@ -90,10 +90,13 @@ namespace Graduation_project.Controllers
         public IActionResult GetTypeofeachCommand()
         {
             return Ok(_unitWork.CommandParams.GetWithInclude(new[] { "ParamType", "ParamValues" })
-                .Select(o => new {
+                .Select(o => new
+                {
                     o.SubSystemId,
-                    o.CommandId, Paramtype= o.ParamType,
-                    ParamValues = o.ParamValues.Select(i => new { i.Id, i.Description  }) }));
+                    o.CommandId,
+                    Paramtype = o.ParamType,
+                    ParamValues = o.ParamValues.Select(i => new { i.Id, i.Description })
+                }));
         }
         //[HttpPost("saveplan")]
         //public IActionResult saveplan(Plan planDtos)
@@ -110,46 +113,26 @@ namespace Graduation_project.Controllers
 
         //Online & Execute
         [HttpPost("saveallplan")]
-        public IActionResult saveallplan(IEnumerable<PlanDots> planDtos , byte flag)
+        public IActionResult saveallplan(IEnumerable<PlanDots> planDtos, byte flag)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
             var plan = _mapper.Map<IEnumerable<Plan>>(planDtos);
 
-              string result =  _unitWork.Plans.saveAll(plan , flag);
-            if(result.Length<16)
+            string result = _unitWork.Plans.saveAll(plan, flag);
+            if (result.Length < 16)
                 return Ok(result);
-            
+
             return BadRequest(result);
         }
 
 
-
-
-
-
-
-        //Defult Plan & Custom Plan
+        //Default Plan & Custom Plan
         [HttpGet("Return plan")]
         public IActionResult getPlan(int id)
         {
-            return Ok(_unitWork.Plans.GetPlan(x=> x.Id == id));
+            return Ok(_unitWork.Plans.GetPlan(x => x.Id == id));
         }
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

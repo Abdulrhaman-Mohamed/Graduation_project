@@ -29,15 +29,20 @@ namespace Graduation_project.Controllers
         }
 
         [HttpGet("GetByDate")]
-        public IActionResult GetPlanResultByDate(int year, int month, int day)
+        public async Task<IActionResult> GetPlanResultByDate(int year, int month, int day)
         {
-
             if (!Util.IsValidDate(year, month, day))
                 return BadRequest(new { message = "Invalid input" });
 
             var date = new DateTime(year, month, day);
-            var plans = _unitWork.PlayBack.GetByDate(date);
-            return Ok(new { plans });
-        }
+            var plans = await _unitWork.PlayBack.GetByDate(date);
+
+            var response = plans.Select(p => new
+            {
+                p.Plan?.Name,
+                p.Result
+            });
+            return Ok(new { response });
+        }   
     }
 }

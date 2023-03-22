@@ -19,14 +19,20 @@ namespace Repo_EF.Repo_Method
 
         public async Task<IEnumerable<PlanResult>> GetByDate(DateTime date)
         {
-            var plans = _context
-                .PlanResults
+            var plan = _context.PlanResults.Include("Plan");
+
+            var plans = await plan
                 .Where(p =>
                     p.Time.Year == date.Year
                     && p.Time.Month == date.Month
                     && p.Time.Day == date.Day).ToListAsync();
 
-            return await plans;
+            plans.ForEach(p =>
+            {
+                Console.WriteLine($"Plane Name = {p?.Plan?.Name}\n");
+            });
+
+            return plans;
         }
     }
 }
