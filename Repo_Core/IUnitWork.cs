@@ -23,6 +23,7 @@ namespace Repo_Core
         IBaseRepo<PlanResult> PlanResults { get; }
 
         IPlayBack PlayBack { get; }
+        IPlan PlanMethods { get; set; }
 
 
 

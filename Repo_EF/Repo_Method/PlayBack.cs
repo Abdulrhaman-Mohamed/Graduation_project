@@ -26,12 +26,6 @@ namespace Repo_EF.Repo_Method
                     p.Time.Year == date.Year
                     && p.Time.Month == date.Month
                     && p.Time.Day == date.Day).ToListAsync();
-
-            plans.ForEach(p =>
-            {
-                Console.WriteLine($"Plane Name = {p?.Plan?.Name}\n");
-            });
-
             return plans;
         }
     }

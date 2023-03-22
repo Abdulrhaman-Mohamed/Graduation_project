@@ -1,4 +1,6 @@
-﻿namespace Graduation_project.ViewModel
+﻿using System.Text.RegularExpressions;
+
+namespace Graduation_project.ViewModel
 {
     public static class Util
     {
@@ -11,6 +13,14 @@
             if (DateTime.TryParse($"{year}-{month}-{day}", out date)) return true;
 
             return false;
+        }
+        public static bool ValidateName(string name)
+        {
+            // A valid name should contain only letters, spaces, hyphens, and numbers
+            // and should not start with a space or hyphen
+            string pattern = @"^[A-Za-z0-9]+([ -][A-Za-z0-9]+)*([ ]?[A-Za-z0-9]*)$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(name);
         }
 
     }

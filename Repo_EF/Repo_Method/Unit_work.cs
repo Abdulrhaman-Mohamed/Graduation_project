@@ -1,17 +1,6 @@
-﻿using Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Repo_Core;
-using Identity.Helper;
+﻿using Repo_Core;
 using Repo_Core.Interface;
 using Repo_Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Reflection.PortableExecutable;
 
 namespace Repo_EF.Repo_Method
 {
@@ -22,22 +11,17 @@ namespace Repo_EF.Repo_Method
 
 
 
-        public IRegsiter<Register> Regsiters { get; private set; }
-        // like IPlan is an interface and injected it by Subsystem class in model 
-        // And i can inject more class if i will use funcations in this methodes Like ( GetListOf() )
-        public IBaseRepo<SubSystem> SubSystems { get; private set; }
-        public IBaseRepo<Command> Commands { get; private set; }
-
-        public IBaseRepo<CommandParam> CommandParams { get; private set; }
-        public IBaseRepo<ParamType> ParamTypes { get; private set; }
-        public IBaseRepo<ParamValue> ParamValues { get; private set; }
-        public IBaseRepo<Plan> Plans { get; private set; }
+        public IRegsiter<Register> Regsiters { get; }
+        public IBaseRepo<SubSystem> SubSystems { get; }
+        public IBaseRepo<Command> Commands { get; }
+        public IBaseRepo<CommandParam> CommandParams { get; }
+        public IBaseRepo<ParamType> ParamTypes { get; }
+        public IBaseRepo<ParamValue> ParamValues { get; }
+        public IBaseRepo<Plan> Plans { get; }
         public IBaseRepo<PlanResult> PlanResults { get; }
 
-        public IPlayBack PlayBack { get; private set; }
-
-
-
+        public IPlayBack PlayBack { get; }
+        public IPlan PlanMethods { get; set; }
 
 
         public UnitWork(ApplicationDbContext dbContext)
@@ -53,6 +37,7 @@ namespace Repo_EF.Repo_Method
             Plans = new BaseMethodes<Plan>(_dbContext);
             PlanResults = new BaseMethodes<PlanResult>(_dbContext);
             PlayBack = new PlayBack(_dbContext);
+            PlanMethods = new PlanMethods(_dbContext);
 
         }
 
