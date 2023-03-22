@@ -28,5 +28,18 @@ namespace Repo_EF.Repo_Method
                     && p.Time.Day == date.Day).ToListAsync();
             return plans;
         }
+
+        public async Task<PlanResult?> GetPlanResultByPlanName(string name)
+        {
+            var plan = _context.PlanResults.Include(p => p.Plan);
+
+            var query = name.ToLower().Trim();
+
+            var result = await plan.FirstOrDefaultAsync(
+                p => p.Plan.Name.ToLower().Trim().Equals(query)
+                );
+
+            return result;
+        }
     }
 }

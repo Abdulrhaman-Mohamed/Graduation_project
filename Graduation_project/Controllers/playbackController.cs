@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Core;
+using System;
+using Castle.Core.Internal;
+using Repo_Core.Models;
 
 namespace Graduation_project.Controllers
 {
@@ -36,6 +39,7 @@ namespace Graduation_project.Controllers
 
             var date = new DateTime(year, month, day);
             var plans = await _unitWork.PlayBack.GetByDate(date);
+            if (plans.IsNullOrEmpty()) return NotFound();
 
             var response = plans.Select(p => new
             {
@@ -43,6 +47,20 @@ namespace Graduation_project.Controllers
                 p.Result
             });
             return Ok(new { response });
-        }   
+        }
+
+        [HttpGet("GetPlanResultByName")]
+        public async Task<IActionResult> GetPlanResultByName(string name)
+        {
+            var planResult = new PlanResult();
+
+            if (Util.ValidateName(name))
+                planResult = await _unitWork.PlayBack.GetPlanResultByPlanName(name);
+
+            if (planResult?.Plan == null) return NotFound();
+
+            return Ok(new { planResult });
+
+        }
     }
 }

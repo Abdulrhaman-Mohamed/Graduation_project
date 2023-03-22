@@ -20,7 +20,6 @@ namespace Repo_EF.Repo_Method
                 .FirstOrDefaultAsync(p =>
                     p.Name != null && p.Name.ToLower().Trim().Equals(query)
                     );
-            Console.WriteLine($"Plan Name  = {plan?.Name}");
             return plan ?? new Plan();
         }
     }

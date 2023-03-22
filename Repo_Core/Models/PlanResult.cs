@@ -14,7 +14,6 @@ namespace Repo_Core.Models
         public int Id { get; set; }
         public int PlanSequenceNumber { get; set; }
         public int PlanId { get; set; }
-        [JsonIgnore]
         public virtual Plan? Plan { get; set; }
         public DateTime Time { get; set; }
         public string? Result { get; set; }
