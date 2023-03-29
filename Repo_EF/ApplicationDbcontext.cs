@@ -1,17 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Repo_Core.Identity_Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repo_Core.Models;
 
 
 namespace Repo_EF
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
-        //public DbSet<Register> Registers { get; set; }
 
         public virtual DbSet<Command> Commands { get; set; }
         public virtual DbSet<CommandParam> CommandParams { get; set; }
@@ -24,9 +23,16 @@ namespace Repo_EF
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<SubSystem> Subsystems { get; set; }
 
+        //Identity
+        public virtual DbSet<Posts> Posts { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+
             // Station 
             modelBuilder.Entity<Station>().HasKey(c => new { c.Id });
 
@@ -36,8 +42,6 @@ namespace Repo_EF
             // Command 
             modelBuilder.Entity<Command>()
                 .HasKey(c => new { c.Id, c.SubSystemId });
-
-
 
             // Plan 
             modelBuilder.Entity<Plan>()
@@ -50,8 +54,6 @@ namespace Repo_EF
 
             modelBuilder.Entity<Plan>().HasIndex(x => x.FlagWatting)
                 .HasFilter("[FlagWatting] IS False");
-
-
 
             // PlanResult 
             modelBuilder.Entity<PlanResult>()
@@ -70,9 +72,6 @@ namespace Repo_EF
             modelBuilder.Entity<CommandParam>()
                 .HasKey(c => new { c.Id, c.CommandId, c.SubSystemId });
 
-
-
-
             // ParamType
             modelBuilder.Entity<ParamType>().HasKey(c => new { c.Id });
             // ParamValue
@@ -83,27 +82,29 @@ namespace Repo_EF
             modelBuilder.Entity<ParamValue>().HasKey(c => new { c.Id, c.SubSystemID, c.CommandID, c.CommandParamID });
 
 
+            // Identity
 
+            //feedback
+            modelBuilder.Entity<Feedback>()
+                .HasKey(x => x.Id);
 
+            modelBuilder.Entity<Feedback>()
+                .HasOne(o => o.User)
+                .WithMany(o => o.Feedbacks);
 
+            modelBuilder.Entity<Feedback>()
+                .HasOne(o => o.Post)
+                .WithMany(o => o.feedback);
 
+            //posts
+            modelBuilder.Entity<Posts>()
+                .HasOne(o => o.User)
+                .WithMany(o => o.Posts);
 
-
-
-
-
-
+            modelBuilder.Entity<Plan>()
+                .HasOne(o => o.ApplicationUser)
+                .WithMany(o => o.Plans);
         }
-
-
-
-
-
-
-
-
-
-
     }
 }
 

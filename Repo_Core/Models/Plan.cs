@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Repo_Core.Identity_Models;
 
 
 namespace Repo_Core.Models
@@ -15,12 +16,10 @@ namespace Repo_Core.Models
         public int? AcknowledgeId { get; set; }
         [JsonIgnore]
         public virtual Acknowledge? Acknowledge { get; set; }
-
         public int SubSystemId { get; set; }
         public int CommandId { get; set; }
         [JsonIgnore]
         public virtual Command? Command { get; set; }
-
         public int? Divces { get; set; }
 
         public int? inputParamter { get; set; }
@@ -28,6 +27,7 @@ namespace Repo_Core.Models
         public DateTime dateTime { get; set; }
 
         public bool? FlagWatting { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
     }
 }

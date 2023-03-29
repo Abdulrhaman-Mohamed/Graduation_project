@@ -1,19 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using Repo_Core.Interface;
 using Repo_Core.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-
 namespace Repo_EF.Repo_Method
 {
     public class BaseMethodes<T> : IBaseRepo<T> where T : class

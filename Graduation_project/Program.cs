@@ -1,20 +1,16 @@
-using Identity;
-using Identity.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repo_Core;
-using Identity.Service;
-using Repo_Core.Interface;
 using Repo_EF;
 using Repo_EF.Repo_Method;
 using System.Text;
-using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
-using Identity.Services;
+using Identity;
+using Repo_Core.Services;
+using Repo_Core.Identity_Models;
+using Repo_Core.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,17 +21,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-builder.Services.AddDbContext<UserDbcontext>(
-    options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
-    o => o.MigrationsAssembly(typeof(UserDbcontext).Assembly.FullName)));
+//builder.Services.AddDbContext<UserDbcontext>(
+//    options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
+//    o => o.MigrationsAssembly(typeof(UserDbcontext).Assembly.FullName)));
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<UserDbcontext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
@@ -70,7 +67,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(o=>o.AddPolicy("Grud" , p => p.WithOrigins("http://localhost:44350").AllowAnyMethod().AllowAnyHeader()));
+builder.Services.AddCors(o => o.AddPolicy("Grud", p => p.WithOrigins("http://localhost:44350").AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();
 
