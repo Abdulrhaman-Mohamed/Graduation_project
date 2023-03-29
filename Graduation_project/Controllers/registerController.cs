@@ -1,10 +1,10 @@
-﻿    using Identity.Model;
+﻿using Repo_Core.Identity_Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repo_Core;
 using Repo_Core.Interface;
-using Identity.Service;
 using Repo_Core.Models;
+using Repo_Core.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Graduation_project.Controllers

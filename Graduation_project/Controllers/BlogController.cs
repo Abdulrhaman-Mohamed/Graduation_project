@@ -1,16 +1,12 @@
-﻿using Graduation_project.ViewModel;
-using Identity.Model;
-using Identity.Services;
-using Microsoft.AspNetCore.Hosting;
+﻿using Repo_Core.Identity_Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Repo_Core;
-using System.ComponentModel;
-using System.Net;
-using System.Security.Policy;
-using System.IO;
+using Repo_Core.Interface;
+using Repo_Core.Models;
+using Repo_Core.Services;
+using Microsoft.AspNetCore.Authorization;
+using Graduation_project.ViewModel;
 
 namespace Graduation_project.Controllers
 {

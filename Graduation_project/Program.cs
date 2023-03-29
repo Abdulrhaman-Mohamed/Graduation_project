@@ -7,7 +7,6 @@ using Repo_EF.Repo_Method;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
-using Identity;
 using Repo_Core.Services;
 using Repo_Core.Identity_Models;
 using Repo_Core.Helper;
@@ -21,10 +20,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-//builder.Services.AddDbContext<UserDbcontext>(
-//    options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
-//    o => o.MigrationsAssembly(typeof(UserDbcontext).Assembly.FullName)));
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
