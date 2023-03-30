@@ -1,4 +1,6 @@
-﻿using Repo_Core.Identity_Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Repo_Core.Identity_Models;
 using Repo_Core.Services;
 
 namespace Repo_EF.Repo_Method
@@ -23,12 +25,53 @@ namespace Repo_EF.Repo_Method
             return Context.Posts.Skip(totalNumber).Take(pagesize).ToList();
         }
 
-        public async Task<Posts> Add(Posts blogs)
+        public async Task<int> Add(Posts blogs)
         {
             await Context.AddAsync(blogs);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
-            return blogs;
+            return blogs.id;
+        }
+
+        public  async Task<string> SaveImages(List<IFormFile> strm , int id )
+        {
+            List<Images> imagesAppend = new List<Images>();
+            foreach (var File in strm)
+            {
+
+                try
+                {
+                    var name = Path.GetRandomFileName();
+
+                    string path = $"wwwroot/Upload/{name}";
+                    using (Stream stream = new FileStream(path, FileMode.Create))
+                    {
+                        File.CopyTo(stream);
+                    }
+
+                    imagesAppend.Add(
+                        new Images
+                        {
+                            FakeName = name,
+                            Postsid = id,
+                            ContentType = File.ContentType,
+                            StoredFileName = File.FileName
+                        });
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+
+
+            }
+            await Context.Images.AddRangeAsync(imagesAppend);
+            await Context.SaveChangesAsync();
+
+            return "succeeded";
         }
     }
 }

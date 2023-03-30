@@ -8,6 +8,7 @@ using Repo_Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Graduation_project.ViewModel;
 using Repo_EF;
+using System.IO;
 
 namespace Graduation_project.Controllers
 {
@@ -40,56 +41,24 @@ namespace Graduation_project.Controllers
         }
 
         [HttpPost("Images")]
-        public async Task<IActionResult> CreateAsync([FromBody] PostsDtos strm)
+        public async Task<IActionResult> CreateAsync([FromForm] PostsDtos strm )
         {
             if(!ModelState.IsValid)
                 return BadRequest("There are something lost");
 
-            List<Images> imagesAppend = new List<Images>();
-            foreach(var image in strm.Images)
+            Posts files = new Posts();
             {
-                try
-                {
-                    var name = new Guid();
-                    string filepath = $"wwwroot/upload/{name}";
-                    var bytess = Convert.FromBase64String(image);
-                    using (var imageFile = new FileStream(filepath, FileMode.Create))
-                    {
-
-                        imageFile.Write(bytess, 0, bytess.Length);
-                        imageFile.Flush();
-                    }
-
-                    imagesAppend.Add(new Images { Name = name.ToString() });
-
-                }
-                catch (Exception)
-                {
-
-                    throw ;
-                }
-
-               
-                
-            }
-            dbContext.Images.AddRangeAsync(imagesAppend);
-            dbContext.SaveChangesAsync();
-
-
-
-
-
-        Posts files = new Posts();
-            {
-                files.postTitle = strm.postTitle; 
+                files.postTitle = strm.postTitle;
                 files.postContent = strm.postContent;
                 files.postDate = strm.postDate;
                 files.UserId = strm.UserId;
             };
+            var id = await _blogService.Add(files);
 
-            return Ok(_blogService.Add(files));
+            if(strm.formFile != null )
+                await _blogService.SaveImages(strm.formFile, id);
 
-
+            return Ok();
         }
 
     }

@@ -12,8 +12,8 @@ using Repo_EF;
 namespace Repo_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230330144928_raltionPostswithImages")]
-    partial class raltionPostswithImages
+    [Migration("20230330202046_RelationbetweenImagesAndPost")]
+    partial class RelationbetweenImagesAndPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -271,11 +271,20 @@ namespace Repo_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FakeName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Postsid")
                         .HasColumnType("int");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

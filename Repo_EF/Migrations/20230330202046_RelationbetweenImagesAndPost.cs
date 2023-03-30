@@ -4,7 +4,7 @@
 
 namespace Repo_EF.Migrations
 {
-    public partial class raltionPostswithImages : Migration
+    public partial class RelationbetweenImagesAndPost : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,9 @@ namespace Repo_EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FakeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StoredFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Postsid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

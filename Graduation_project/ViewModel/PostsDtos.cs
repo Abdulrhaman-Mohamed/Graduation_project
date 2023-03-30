@@ -8,7 +8,10 @@ namespace Graduation_project.ViewModel
         public string postContent { get; set; }
 
         public DateTime postDate { get; set; }
-        public List<string> Images { get; set; }
+
+        public List<IFormFile?>? formFile { get; set; }
+
+
         public string UserId { get; set; }
     }
 }
