@@ -12,10 +12,14 @@ namespace Repo_EF.Repo_Method
         }
 
 
-        public ICollection<Posts> GetPosts(int page, int pagesize)
+        public ICollection<Posts> GetPosts(int page, byte pagesize)
         {
+            if(page <= 0)
+                page = 1;
+            if (pagesize <= 0)
+                pagesize = 10;
 
-            int totalNumber = page * pagesize;
+            int totalNumber = (page - 1) * pagesize;
             return Context.Posts.Skip(totalNumber).Take(pagesize).ToList();
         }
 

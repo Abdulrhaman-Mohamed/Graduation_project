@@ -26,6 +26,7 @@ namespace Repo_EF
         //Identity
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -104,6 +105,14 @@ namespace Repo_EF
             modelBuilder.Entity<Plan>()
                 .HasOne(o => o.ApplicationUser)
                 .WithMany(o => o.Plans);
+
+
+            //Images
+            modelBuilder.Entity<Images>()
+                .HasKey(o => o.Id);
+            modelBuilder.Entity<Images>()
+                .HasOne(o=> o.Posts)
+                .WithMany(o => o.Images);
         }
     }
 }

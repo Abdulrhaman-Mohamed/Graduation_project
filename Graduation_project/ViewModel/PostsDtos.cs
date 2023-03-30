@@ -1,12 +1,14 @@
-﻿namespace Graduation_project.ViewModel
+﻿using Repo_Core.Identity_Models;
+
+namespace Graduation_project.ViewModel
 {
     public class PostsDtos
     {
-        public string? postTitle { get; set; }
-        public string? postContent { get; set; }
+        public string postTitle { get; set; }
+        public string postContent { get; set; }
 
         public DateTime postDate { get; set; }
-        public string? postImages { get; set; }
+        public List<string> Images { get; set; }
         public string UserId { get; set; }
     }
 }
