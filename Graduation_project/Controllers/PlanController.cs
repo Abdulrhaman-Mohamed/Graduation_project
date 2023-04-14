@@ -92,5 +92,12 @@ namespace Graduation_project.Controllers
 
             return Ok(new { plan });
         }
+
+        [HttpGet("GetFixedPlans")]
+        public async Task<IActionResult> GetFixedPlans()
+        {
+            var reuslt = await _unitWork.PlanMethods.GetFixedPlan();
+            return Ok(new { reuslt });
+        }
     }
 }

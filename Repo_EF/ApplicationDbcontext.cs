@@ -48,7 +48,6 @@ namespace Repo_EF
             modelBuilder.Entity<Plan>()
                 .HasKey(c => new { c.Id, c.SequenceNumber });
 
-
             modelBuilder.Entity<Plan>().HasOne(o => o.Command)
                 .WithMany(o => o.Plans)
                 .HasForeignKey(o => new { commandID = o.CommandId, o.SubSystemId });
@@ -62,8 +61,6 @@ namespace Repo_EF
 
             // Acknowledge
             modelBuilder.Entity<Acknowledge>().HasKey(c => new { c.Id });
-
-
 
             //CommandParam
             modelBuilder.Entity<CommandParam>().HasOne(c => c.Command)
@@ -111,7 +108,7 @@ namespace Repo_EF
             modelBuilder.Entity<Images>()
                 .HasKey(o => o.Id);
             modelBuilder.Entity<Images>()
-                .HasOne(o=> o.Posts)
+                .HasOne(o => o.Posts)
                 .WithMany(o => o.Images);
         }
     }

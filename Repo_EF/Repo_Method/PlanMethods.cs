@@ -22,5 +22,17 @@ namespace Repo_EF.Repo_Method
                     );
             return plan ?? new Plan();
         }
+
+        public async Task<List<Plan>> GetFixedPlan()
+        {
+            var include = new[] { "Acknowledge", "Command" };
+            var query = _context.Plans;
+            foreach (var s in include)
+            {
+                query.Include(s);
+            }
+
+            return await query.Take(10).ToListAsync();
+        }
     }
 }
