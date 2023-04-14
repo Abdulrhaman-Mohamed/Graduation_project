@@ -94,10 +94,13 @@ namespace Graduation_project.Controllers
         }
 
         [HttpGet("GetFixedPlans")]
-        public async Task<IActionResult> GetFixedPlans()
+        public async Task<IActionResult> GetFixedPlans(int num)
         {
-            var reuslt = await _unitWork.PlanMethods.GetFixedPlan();
-            return Ok(new { reuslt });
+            if (num < 1)
+                return BadRequest("Invalid Number");
+
+            var result = await _unitWork.PlanMethods.GetFixedPlan(num);
+            return Ok(new { result });
         }
     }
 }
