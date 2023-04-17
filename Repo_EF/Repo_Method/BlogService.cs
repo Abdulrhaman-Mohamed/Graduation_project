@@ -16,7 +16,7 @@ namespace Repo_EF.Repo_Method
 
         public ICollection<Posts> GetPosts(int page, byte pagesize)
         {
-            if(page <= 0)
+            if (page <= 0)
                 page = 1;
             if (pagesize <= 0)
                 pagesize = 10;
@@ -33,7 +33,7 @@ namespace Repo_EF.Repo_Method
             return blogs.id;
         }
 
-        public  async Task<string> SaveImages(List<IFormFile> strm , int id )
+        public async Task<string> SaveImages(List<IFormFile> strm, int id)
         {
             List<Images> imagesAppend = new List<Images>();
             foreach (var File in strm)
@@ -41,6 +41,7 @@ namespace Repo_EF.Repo_Method
 
                 try
                 {
+
                     var name = Path.GetRandomFileName();
 
                     string path = $"wwwroot/Upload/{name}";
@@ -48,7 +49,6 @@ namespace Repo_EF.Repo_Method
                     {
                         File.CopyTo(stream);
                     }
-
                     imagesAppend.Add(
                         new Images
                         {

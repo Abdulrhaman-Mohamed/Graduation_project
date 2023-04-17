@@ -82,13 +82,12 @@ namespace Graduation_project.Controllers
         [HttpGet("GetPlanByName")]
         public async Task<IActionResult> GetPlanByName(string name)
         {
-            var plan = new Plan();
+            var plan = new List<Plan>();
 
             if (Util.ValidateName(name))
                 plan = await _unitWork.PlanMethods.GetPlanByName(name);
 
-            if (plan.Name.IsNullOrEmpty())
-                return NotFound();
+            if (plan.IsNullOrEmpty()) return NotFound();
 
             return Ok(new { plan });
         }

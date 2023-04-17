@@ -13,14 +13,14 @@ namespace Repo_EF.Repo_Method
             _context = context;
         }
 
-        public async Task<Plan> GetPlanByName(string name)
+        public async Task<List<Plan>> GetPlanByName(string name)
         {
             var query = name.ToLower().Trim();
             var plan = await _context.Plans
-                .FirstOrDefaultAsync(p =>
+                .Where(p =>
                     p.Name != null && p.Name.ToLower().Trim().Equals(query)
-                    );
-            return plan ?? new Plan();
+                    ).ToListAsync();
+            return plan;
         }
 
         public async Task<List<Plan>> GetFixedPlan(int num)
