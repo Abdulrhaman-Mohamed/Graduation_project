@@ -1,9 +1,5 @@
 ﻿using Repo_Core.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Identity.Models;
 
 namespace Repo_EF.Repo_Method
 {
@@ -20,13 +16,15 @@ namespace Repo_EF.Repo_Method
             return _DbContext.Set<T>().Find(id);
         }
 
+
+
         public T Regsiter(T info)
         {
             _DbContext.Set<T>().Add(info);
-            
+
             _DbContext.SaveChanges();
             return info;
-            
+
         }
     }
 }
