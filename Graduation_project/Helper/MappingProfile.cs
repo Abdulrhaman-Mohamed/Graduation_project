@@ -10,7 +10,8 @@ namespace Graduation_project.Helper
     {
         public MappingProfile()
         {
-            CreateMap<PlanDots, Plan>();
+            CreateMap<Plan, PlanDots>()
+                 .ForMember(dist => dist.ApplicationUser, src => src.MapFrom(src => src.ApplicationUser.Id));
             CreateMap<FeedbackView, Feedback>()
                 .ForMember(dist => dist.PostId, src => src.MapFrom(src => src.PostId))
                 .ForMember(dist => dist.UserId, src => src.MapFrom(src => src.UserId))

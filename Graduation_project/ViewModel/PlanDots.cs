@@ -21,5 +21,7 @@ namespace Graduation_project.ViewModel
         public DateTime dateTime { get; set; }
 
         public bool? FlagWatting { get; set; }
+        public virtual string ApplicationUser { get; set; }
+
     }
 }
