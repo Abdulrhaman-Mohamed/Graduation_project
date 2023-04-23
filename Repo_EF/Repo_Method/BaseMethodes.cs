@@ -78,11 +78,12 @@ namespace Repo_EF.Repo_Method
                 int count = check.DistinctBy(x => x.Id).Count();
                 if (count > 6)
                     return "There are more than 5 Plans doesn't Execute";
-
-                var nearest = check.MinBy(x => Math.Abs((x.dateTime - time).TotalSeconds));
+                if (count > 0)
+                {
+                var nearest = check.MinBy(x => Math.Abs((x.dateTime - time).TotalSeconds))  ;
                 if (Math.Abs((nearest.dateTime - time).TotalMinutes) <= 30)
                     return "Can't create This Plan Because There are Plans whose time near this plan";
-
+                } 
             }
             foreach (Plan value in plan)
             {

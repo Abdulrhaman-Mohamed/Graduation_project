@@ -28,6 +28,7 @@ namespace Repo_Core.Models
 
         public bool? FlagWatting { get; set; }
         public string ApplicationUserid { get; set; }
+        [JsonIgnore]
         public virtual ApplicationUser? ApplicationUser { get; set; }
         
 
