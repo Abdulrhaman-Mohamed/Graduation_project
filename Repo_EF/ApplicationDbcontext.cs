@@ -101,7 +101,8 @@ namespace Repo_EF
 
             modelBuilder.Entity<Plan>()
                 .HasOne(o => o.ApplicationUser)
-                .WithMany(o => o.Plans);
+                .WithMany(o => o.Plans)
+                .HasForeignKey(o=> o.ApplicationUserid);
 
 
             //Images
