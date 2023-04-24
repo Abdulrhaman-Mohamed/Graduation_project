@@ -13,6 +13,13 @@ namespace Repo_EF.Repo_Method
             Context = context;
         }
 
+         public async Task<string> Addfeedback(Feedback feed)
+        {
+            
+            await Context.Feedbacks.AddAsync(feed);
+            Context.SaveChanges();
+            return "Success"; 
+        }
 
         public ICollection<Posts> GetPosts(int page, byte pagesize)
         {
@@ -72,6 +79,20 @@ namespace Repo_EF.Repo_Method
             await Context.SaveChangesAsync();
 
             return "succeeded";
+        }
+
+         public async Task<string> DeletePosts(int postId)
+        {
+            var x =await Context.Posts.FindAsync(postId); 
+            //var x = Context.Posts.FirstOrDefault(n => n.id == postId);
+            if (x != null)
+            {
+                Context.Remove(x);
+            }
+            
+            Context.SaveChanges();
+            
+            return "deleted";
         }
     }
 }

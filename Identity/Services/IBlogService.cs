@@ -11,5 +11,6 @@ namespace Identity.Services
     {
         ICollection<Posts> GetPosts(int page, int pagesize);
         Task<Posts> Add(Posts blogs);
+        Task<string> Addfeedback(Feedback feed);
     }
 }

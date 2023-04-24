@@ -16,7 +16,7 @@ namespace Graduation_project.Helper
                 .ForMember(dist => dist.UserId, src => src.MapFrom(src => src.UserId))
                 .ForMember(dist => dist.comment, src => src.MapFrom(src => src.comment))
                 .ForMember(dist => dist.feedbacktime, src => src.MapFrom(src => src.feedbacktime));
-
+            CreateMap<Editting, ApplicationUser>();
 
 
 

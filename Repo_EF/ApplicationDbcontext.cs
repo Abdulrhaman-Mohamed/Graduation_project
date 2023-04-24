@@ -28,7 +28,8 @@ namespace Repo_EF
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<Images> Images { get; set; }
 
-
+        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

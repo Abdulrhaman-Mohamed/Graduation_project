@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Repo_Core;
 using Repo_Core.Identity_Models;
 using Repo_EF;
+using Repo_Core.Services;
+using Graduation_project.ViewModel;
+using Repo_Core.Models;
 
 namespace Graduation_project.Controllers
 {
@@ -16,10 +19,13 @@ namespace Graduation_project.Controllers
         private readonly IUnitWork _unitWork;
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public UserController(UserManager<ApplicationUser> userManager)
+        private readonly IEditting _editting;
+        private readonly IMapper _mapper;
+        public UserController(IEditting editting,UserManager<ApplicationUser> userManager,IMapper mapper)
         {
+            _editting = editting;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpGet("GetUserData")]
@@ -42,5 +48,37 @@ namespace Graduation_project.Controllers
 
             return Ok(new { user });
         }
+
+        //get user by id
+        [HttpGet("GetUserById")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            
+            var x = await _editting.GetUserById(id);
+
+            return Ok(x);
+        }
+        
+         //Edit Setting of User (Not Fixed) 
+        [HttpPost("Editting")]
+        public IActionResult EditUser([FromBody] Editting info)
+        {
+           var map= _mapper.Map<ApplicationUser>(info);
+           var x=_editting.EditUser(map);
+
+            return Ok(x);
+        }
+
+        
+         [HttpPost]
+        [Route("Change-Password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+        {
+           await _authService.ChangePassword(model);
+            return Ok();
+            
+        }
+
+
     }
 }

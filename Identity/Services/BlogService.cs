@@ -11,6 +11,7 @@ namespace Identity.Services
 {
     public class BlogService : IBlogService
     {
+        
         protected UserDbcontext Context { get; set; }
         public BlogService(UserDbcontext context)
         {
@@ -31,6 +32,13 @@ namespace Identity.Services
             Context.SaveChanges();
 
             return blogs;
+        }
+         public async Task<string> Addfeedback(Feedback feed)
+        {
+            
+            await Context.Feedbacks.AddAsync(feed);
+            Context.SaveChanges();
+            return "Success"; 
         }
     }
 }
