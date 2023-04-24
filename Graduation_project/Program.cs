@@ -62,7 +62,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(o => o.AddPolicy("Grud", p => p.WithOrigins("http://localhost:44350").AllowAnyMethod().AllowAnyHeader()));
+builder.Services.AddCors(o => o.AddPolicy("Grud", p => p.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();
 

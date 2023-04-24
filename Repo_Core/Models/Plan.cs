@@ -27,7 +27,10 @@ namespace Repo_Core.Models
         public DateTime dateTime { get; set; }
 
         public bool? FlagWatting { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserid { get; set; }
+        [JsonIgnore]
+        public virtual ApplicationUser? ApplicationUser { get; set; }
+        
 
     }
 }

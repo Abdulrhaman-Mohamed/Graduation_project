@@ -5,6 +5,7 @@ namespace Graduation_project.ViewModel
 {
     public class PlanDots
     {
+        public string Name { get; set; }
 
         public int SequenceNumber { get; set; }
         public string? Delay { get; set; }
@@ -21,5 +22,7 @@ namespace Graduation_project.ViewModel
         public DateTime dateTime { get; set; }
 
         public bool? FlagWatting { get; set; }
+        public string ApplicationUserid { get; set; }
+
     }
 }
