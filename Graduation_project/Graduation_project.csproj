@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Identity\Identity.csproj" />
     <ProjectReference Include="..\Repo_EF\Repo_EF.csproj" />
   </ItemGroup>
 

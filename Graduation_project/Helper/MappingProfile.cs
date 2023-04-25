@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Graduation_project.ViewModel;
-using Identity.Model;
-using Identity.Models;
+using Repo_Core.Identity_Models;
 using Repo_Core.Models;
 
 namespace Graduation_project.Helper

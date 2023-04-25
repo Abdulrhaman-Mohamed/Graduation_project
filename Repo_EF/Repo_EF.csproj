@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Identity\Identity.csproj" />
     <ProjectReference Include="..\Repo_Core\Repo_Core.csproj" />
   </ItemGroup>
 
