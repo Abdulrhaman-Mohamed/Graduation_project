@@ -74,7 +74,7 @@ namespace Graduation_project.Controllers
         [Route("Change-Password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
         {
-           await _authService.ChangePassword(model);
+           await _editting.ChangePassword(model);
             return Ok();
             
         }
