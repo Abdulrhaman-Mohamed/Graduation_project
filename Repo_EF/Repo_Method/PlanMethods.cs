@@ -23,7 +23,7 @@ namespace Repo_EF.Repo_Method
             return plan;
         }
 
-        public async Task<List<Plan>> GetFixedPlan(int num)
+        public async Task<List<string?>> GetFixedPlan(int num)
         {
             var include = new[] { "Acknowledge", "Command" };
             var query = _context.Plans;
@@ -32,7 +32,7 @@ namespace Repo_EF.Repo_Method
                 query.Include(s);
             }
 
-            return await query.Take(num).ToListAsync();
+            return await query.Select(p=>p.Name).Take(num).Distinct().ToListAsync();
         }
     }
 }
