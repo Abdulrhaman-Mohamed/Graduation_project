@@ -99,7 +99,7 @@ namespace Graduation_project.Controllers
                 return BadRequest("Invalid Number");
 
             var result = await _unitWork.PlanMethods.GetFixedPlan(num);
-            return Ok(new { result });
+            return Ok(result);
         }
     }
 }

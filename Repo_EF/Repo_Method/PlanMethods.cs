@@ -23,16 +23,17 @@ namespace Repo_EF.Repo_Method
             return plan;
         }
 
-        public async Task<List<string?>> GetFixedPlan(int num)
+        public async Task<List<object>> GetFixedPlan(int num)
         {
-            var include = new[] { "Acknowledge", "Command" };
-            var query = _context.Plans;
-            foreach (var s in include)
+            var plans = await _context.Plans.Take(num).ToListAsync();
+            var result = new HashSet<object>();
+            foreach (var s in plans)
             {
-                query.Include(s);
+                var obj = new { s.Name, s.Id };
+                result.Add(obj);
             }
 
-            return await query.Select(p=>p.Name).Take(num).Distinct().ToListAsync();
+            return result.ToList();
         }
     }
 }
