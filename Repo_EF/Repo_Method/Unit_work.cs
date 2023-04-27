@@ -19,7 +19,7 @@ namespace Repo_EF.Repo_Method
         public IBaseRepo<ParamValue> ParamValues { get; }
         public IBaseRepo<Plan> Plans { get; }
         public IBaseRepo<PlanResult> PlanResults { get; }
-
+        public ICreatePlan CreatePlan { get; }
         public IPlayBack PlayBack { get; }
         public IPlan PlanMethods { get; set; }
 
@@ -38,6 +38,7 @@ namespace Repo_EF.Repo_Method
             PlanResults = new BaseMethodes<PlanResult>(_dbContext);
             PlayBack = new PlayBack(_dbContext);
             PlanMethods = new PlanMethods(_dbContext);
+            CreatePlan = new CreatePlan(_dbContext);
 
         }
 

@@ -64,7 +64,7 @@ namespace Graduation_project.Controllers
                 return BadRequest();
             var plan = _mapper.Map<IEnumerable<Plan>>(planDtos);
 
-            string result = _unitWork.Plans.saveAll(plan, flag);
+            string result = _unitWork.CreatePlan.saveAll(plan, flag);
             if (result.Length < 16)
                 return Ok(result);
 

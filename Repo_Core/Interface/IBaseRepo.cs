@@ -24,9 +24,7 @@ namespace Repo_Core.Interface
 
         
 
-        string saveAll(IEnumerable<Plan> plans , byte flag );
-
-
+       
 
 
 
