@@ -11,6 +11,11 @@ using Repo_Core.Services;
 using Repo_Core.Identity_Models;
 using Repo_Core.Helper;
 
+
+
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -21,6 +26,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 
+
+
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -29,12 +36,17 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+
+
+
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
 builder.Services.AddTransient<IUnitWork, UnitWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEditting, EdittingServices>();
 builder.Services.AddTransient<IBlogService, BlogService>();
+builder.Services.AddHostedService<ScheduledJobService>();
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -73,11 +85,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("Grud");
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 
 app.Run();
