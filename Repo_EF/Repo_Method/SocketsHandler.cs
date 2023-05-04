@@ -1,4 +1,5 @@
 ﻿using Repo_Core.Interface;
+using System;
 using System.Net.WebSockets;
 
 namespace Repo_EF.Repo_Method
@@ -9,6 +10,31 @@ namespace Repo_EF.Repo_Method
         private WebSocket[] RoverSockets = new WebSocket[3];
 
         protected async Task HandleData() { }
+
+        protected async Task PingPong(WebSocket webSocket)
+        {
+            var PingPongBuffer = new byte[] { 54, 57, 54, 57 };
+            WebSocketReceiveResult PingPongResults;
+            do
+            {
+                await webSocket.SendAsync(
+                    new ArraySegment<byte>(PingPongBuffer, 0, 5),
+                    WebSocketMessageType.Binary,
+                    true,
+                    CancellationToken.None);
+
+                PingPongResults = await webSocket.ReceiveAsync(
+                    new ArraySegment<byte>(PingPongBuffer),
+                    CancellationToken.None);
+
+            } while (!PingPongResults.CloseStatus.HasValue);
+
+            await webSocket.CloseAsync(
+                PingPongResults.CloseStatus.Value,
+                PingPongResults.CloseStatusDescription,
+                CancellationToken.None
+                );
+        }
 
         public void SetSocket(WebSocket webSocket, Sockets socket, SocketsType type) 
         {
@@ -43,6 +69,14 @@ namespace Repo_EF.Repo_Method
                 CancellationToken.None
                 );
         }
+
+        public async void HandleConnection(WebSocket webSocket, Sockets socket, SocketsType type)
+        {
+            SetSocket(webSocket, socket, type);
+            await PingPong(webSocket);
+            ReleaseSocket(socket, type);
+        }
+        
 
     }
 }

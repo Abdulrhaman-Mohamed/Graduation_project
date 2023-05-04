@@ -26,5 +26,6 @@ namespace Repo_Core.Interface
         // Send Data is data from Rover to Front
         public Task SendData(byte[] bytes, Sockets sockets);
 
+        public void HandleConnection(WebSocket webSocket, Sockets socket, SocketsType type);
     }
 }
