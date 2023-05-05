@@ -20,12 +20,13 @@ namespace Repo_Core.Interface
         public void SetSocket(WebSocket webSocket, Sockets sockets, SocketsType type);
         public void ReleaseSocket(Sockets sockets, SocketsType type);
 
-        //Note Null Sockets situation isn't handled ( Meaning no socket exit at call time is may give error)
-        // Accept Data is data from Front to Rover
-        public Task AcceptData(byte[] bytes, Sockets sockets);
-        // Send Data is data from Rover to Front
-        public Task SendData(byte[] bytes, Sockets sockets);
+        // Note Null Sockets situation isn't handled ( Meaning no socket exit at call time is may give error)
+        //public Task SendRoverData(byte[] bytes, Sockets sockets);
+        //public Task SendFrontData(byte[] bytes, Sockets sockets);
 
-        public void HandleConnection(WebSocket webSocket, Sockets socket, SocketsType type);
+        //public Task AcceptRoverData(WebSocket webSocket);
+        //public Task AcceptFrontData(WebSocket webSocket);
+
+        public Task HandleFrontConnection(WebSocket webSocket, Sockets socket, SocketsType type);
     }
 }
