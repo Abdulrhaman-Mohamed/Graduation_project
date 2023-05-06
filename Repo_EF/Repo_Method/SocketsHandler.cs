@@ -1,4 +1,5 @@
 ﻿using Repo_Core.Interface;
+using Repo_Core.Models;
 using System;
 using System.Net.WebSockets;
 
@@ -11,6 +12,11 @@ namespace Repo_EF.Repo_Method
         private WebSocket[] RoverSockets = new WebSocket[3];
         WebSocketReceiveResult RoverData;
         WebSocketReceiveResult FrontData;
+        private readonly ApplicationDbContext _dbContext;
+        public SocketsHandler(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         // this is PingPong Sockets only work for keepping sockets alive
         protected async Task PingPong(WebSocket webSocket)
@@ -140,6 +146,35 @@ namespace Repo_EF.Repo_Method
             await CloseSocket(webSocket, FrontData);
 
             ReleaseSocket(socket, type);
+        }
+
+        // DeSerializerBody from arduino
+        private PlanResult DeSerializerBody(byte[] DeSerializerBody)
+        {
+            // use Array.Reverse(PlanID, 0 ,PlanID.Length); if the DeSerializerBody array is in big-endian byte order 
+            PlanResult result = new PlanResult();
+
+            byte[] PlanID = new byte[2];
+            PlanID[0] = DeSerializerBody[0];
+            PlanID[1] = DeSerializerBody[1];
+            Array.Reverse(PlanID, 0, PlanID.Length);
+            int Id = BitConverter.ToInt32(PlanID, 0);
+
+
+
+            // save result in database Note :(implemention down)
+            SaveResultfromarduino(result);
+
+            // the reset of the code will be completed when you accept to a specific data format
+            return result;
+        }
+
+
+        // save result after DeSerializerBody
+        private PlanResult SaveResultfromarduino(PlanResult planResult)
+        {
+            _dbContext.PlanResults.AddAsync(planResult);
+            return planResult;
         }
 
     }
