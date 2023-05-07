@@ -10,7 +10,7 @@ namespace Repo_EF.Repo_Method
         private readonly ApplicationDbContext _dbContext;
 
 
-
+        
         public IRegsiter<Register> Regsiters { get; }
         public IBaseRepo<SubSystem> SubSystems { get; }
         public IBaseRepo<Command> Commands { get; }

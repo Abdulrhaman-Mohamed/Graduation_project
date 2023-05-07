@@ -22,8 +22,6 @@ namespace Repo_Core.Interface
         IEnumerable<T> GetPlan(Expression<Func<T, bool>> planId, string[]? include = null);
         T GetPlayBack(Expression<Func<T, bool>> match, string[]? include = null);
 
-        
-
        
 
 

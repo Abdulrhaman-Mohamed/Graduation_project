@@ -6,16 +6,19 @@ using Microsoft.EntityFrameworkCore;
 using Repo_Core;
 using Repo_Core.Identity_Models;
 using Repo_EF;
+using Repo_EF.Repo_Method;
 using Repo_Core.Services;
 using Graduation_project.ViewModel;
 using Repo_Core.Models;
 
 namespace Graduation_project.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        
         private readonly IUnitWork _unitWork;
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -53,19 +56,21 @@ namespace Graduation_project.Controllers
         [HttpGet("GetUserById")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            
+        
             var x = await _editting.GetUserById(id);
 
             return Ok(x);
         }
         
+        
          //Edit Setting of User (Not Fixed) 
         [HttpPost("Editting")]
-        public IActionResult EditUser([FromBody] Editting info)
+        public async Task<IActionResult> EditUser([FromBody] Editting info )
         {
-           var map= _mapper.Map<ApplicationUser>(info);
-           var x=_editting.EditUser(map);
-
+            if(ModelState.IsValid) 
+                return BadRequest("Email or username unsuitable '\n' Email should be like user@example.com '\n' Username must have at least one uppercase ('A'-'Z'),  least one digit ('0'-'9') , least one non alphanumeric character. ");
+            var map = _mapper.Map<ApplicationUser>(info);
+            var x = await _editting.EditUser(map);
             return Ok(x);
         }
 

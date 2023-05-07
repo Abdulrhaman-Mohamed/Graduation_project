@@ -17,7 +17,7 @@ namespace Repo_EF.Repo_Method
         {
             
             await Context.Feedbacks.AddAsync(feed);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
             return "Success"; 
         }
 
@@ -81,17 +81,20 @@ namespace Repo_EF.Repo_Method
             return "succeeded";
         }
 
-         public async Task<string> DeletePosts(int postId)
+        public string DeletePosts(int postId)
         {
-            var x =await Context.Posts.FindAsync(postId); 
-            //var x = Context.Posts.FirstOrDefault(n => n.id == postId);
-            if (x != null)
+            //var x =await Context.Posts.FindAsync(postId); 
+            var x = Context.Posts.FirstOrDefault(n => n.id == postId);
+            if (x.id != null)
             {
                 Context.Remove(x);
             }
-            
+            else
+            {
+                return "not found";
+            }
             Context.SaveChanges();
-            
+
             return "deleted";
         }
     }

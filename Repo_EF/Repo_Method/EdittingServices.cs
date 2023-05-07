@@ -1,17 +1,17 @@
 ﻿
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
-using Repo_Core;
-using Repo_Core.Identity_Models;
 using Repo_Core.Models;
+using Repo_Core.Identity_Models;
 using Repo_EF;
+using Repo_EF.Repo_Method;
 
 namespace Repo_Core.Services
 {
     public class EdittingServices : IEditting
     {
-        protected ApplicationDbContext _DbContext;
+        private ApplicationDbContext _DbContext;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public EdittingServices(ApplicationDbContext dbContext, UserManager<ApplicationUser> userDbcontext)
         {
             _DbContext = dbContext;
@@ -23,13 +23,14 @@ namespace Repo_Core.Services
         public async Task<ApplicationUser> GetUserById(string id) => await _userManager.FindByIdAsync(id);
 
 
-         public async Task<string> EditUser(ApplicationUser info)
+        public async Task<string> EditUser(ApplicationUser info)
         {
-            var user =await _DbContext.ApplicationUsers.FindAsync(info.Id);
-            //var user = _DbContext.ApplicationUsers.FirstOrDefault(n => n.Id == info.Id);
+            //var user =await _DbContext.ApplicationUsers.FindAsync(info.Id);
+            var user = _DbContext.ApplicationUsers.FirstOrDefault(n => n.Id == info.Id);
             var uname=await _DbContext.ApplicationUsers.FindAsync(info.UserName);
             //var uname = _DbContext.ApplicationUsers.Where(n=>n.Id!=info.Id).FirstOrDefault(o => o.UserName == info.UserName);
             string x = "";
+            
             if (uname != null)
             {
                 x= "exist username ,plz add new one";
@@ -38,29 +39,22 @@ namespace Repo_Core.Services
             {
                 if (user != null)
                 {
-
+                    
                     user.PhoneNumber = info.PhoneNumber;
                     user.FirstName = info.FirstName;
                     user.LastName = info.LastName;
                     user.UserName = info.UserName;
+                    user.Email = info.Email;
+                    user.NormalizedEmail = info.Email.ToString().ToUpper();
                     user.NormalizedUserName = info.UserName.ToString().ToUpper();
                 }
-
-                  _DbContext.SaveChanges();
-                 x = "Update Success '_'";
-                var result =await  _userManager.UpdateAsync(user);
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new ActionConverter(_DbContext));
+                x = "Update Success '_'";
             }
             return x;
-        }
-        // public string Addfeedback(Feedback feed)
-        // {
 
-        //     _DbContext.Feedbacks.Add(feed);
-
-        //     _DbContext.SaveChanges();
-        //     return "Success";
-        // }
-
+        } 
         //ChangePassword 
         public async Task<AuthModel> ChangePassword(ChangePasswordModel model)
         {

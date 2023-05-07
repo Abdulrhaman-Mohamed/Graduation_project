@@ -24,7 +24,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
+    
+var conString = builder.Configuration.GetConnectionString("DeafultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
 
 
 

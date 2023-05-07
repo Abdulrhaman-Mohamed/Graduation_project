@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repo_Core.Models;
-
+using Repo_EF.Repo_Method;
 
 namespace Repo_EF
 {
@@ -29,7 +29,6 @@ namespace Repo_EF
         public virtual DbSet<Images> Images { get; set; }
 
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

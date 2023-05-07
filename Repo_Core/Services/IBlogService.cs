@@ -7,7 +7,7 @@ namespace Repo_Core.Services
     {
         ICollection<Posts> GetPosts(int page, byte pagesize);
         Task<int> Add(Posts blogs);
-        Task<string> DeletePosts(int postId);
+        string DeletePosts(int postId);
         Task<string> Addfeedback(Feedback feed);
         Task<String> SaveImages(List<IFormFile> strm , int id );
     }

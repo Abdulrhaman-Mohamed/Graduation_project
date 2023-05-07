@@ -29,6 +29,7 @@ namespace Graduation_project.Controllers
             _blogService = blogService;
             _webHostEnvironment = webHostEnvironment;
             dbContext = _dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet("All-blogs")]
@@ -68,7 +69,8 @@ namespace Graduation_project.Controllers
         public async Task<IActionResult> Addfeedback([FromBody] FeedbackView feedback)
         {
             var feedback1 = _mapper.Map<Feedback>(feedback);
-            return Ok(_blogService.Addfeedback(feedback1));
+            var map =await _blogService.Addfeedback(feedback1);
+            return Ok(map);
             
         }
 
@@ -76,8 +78,8 @@ namespace Graduation_project.Controllers
         [HttpGet("Delete Post")]
         public IActionResult DeletePosts(int postId)
         {
-            _blogService.DeletePosts(postId);
-            return Ok();
+             
+            return Ok(_blogService.DeletePosts(postId));
         }
 
 
