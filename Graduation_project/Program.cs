@@ -10,11 +10,7 @@ using System.Text.Json.Serialization;
 using Repo_Core.Services;
 using Repo_Core.Identity_Models;
 using Repo_Core.Helper;
-
-
-
-
-
+using Repo_Core.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +41,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
 builder.Services.AddTransient<IUnitWork, UnitWork>();
+builder.Services.AddSingleton<ISocketsHandler, SocketsHandler>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEditting, EdittingServices>();
 builder.Services.AddTransient<IBlogService, BlogService>();

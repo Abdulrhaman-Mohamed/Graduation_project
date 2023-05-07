@@ -78,19 +78,7 @@ namespace Repo_EF.Repo_Method
             return SerializerBody;
         }
 
-        public Plan DeSerializerBody(byte[] DeSerializerBody) 
-        {
-            // use Array.Reverse(PlanID, 0 ,PlanID.Length); if the DeSerializerBody array is in big-endian byte order 
-            Plan plan = new Plan();
-
-            byte[] PlanID = new byte[2];
-            PlanID[0] = DeSerializerBody[0];
-            PlanID[1] = DeSerializerBody[1];
-            Array.Reverse(PlanID, 0, PlanID.Length);
-            int Id = BitConverter.ToInt32(PlanID, 0);
-            // the reset of the code will be completed when you accept to a specific data format
-            return plan;
-        }
+        
 
     }
 }
