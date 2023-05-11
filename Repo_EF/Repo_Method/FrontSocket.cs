@@ -7,8 +7,8 @@ namespace Repo_EF.Repo_Method
     public class FrontSocket : ABCSocket
     {
         private WebSocket? ClassSocket { get; set; }
-        private WebSocketReceiveResult ClassResult { get; set; }
         private WebSocket? ForgienSocket { get; set; }
+        private WebSocketReceiveResult ClassResult { get; set; }
 
         public FrontSocket() { }
 
@@ -41,11 +41,11 @@ namespace Repo_EF.Repo_Method
             ForgienSocket = ForgienWebSocket;
         }
 
-        public override async void CloseSocket(WebSocketReceiveResult result)
+        public override async void CloseSocket()
         {
             await ClassSocket.CloseAsync(
-                result.CloseStatus.Value,
-                result.CloseStatusDescription,
+                ClassResult.CloseStatus.Value,
+                ClassResult.CloseStatusDescription,
                 CancellationToken.None);
             ClassSocket.Dispose();
         }

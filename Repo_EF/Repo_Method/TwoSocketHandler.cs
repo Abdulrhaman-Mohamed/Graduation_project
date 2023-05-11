@@ -15,7 +15,7 @@ namespace Repo_EF.Repo_Method
         private SocketsHandler SocketHandle;
         private WebSocket ClassSocket { get; set; }
         private WebSocket ForgienSocket { get; set; }
-        private ABCSocket socketClass { get; set; }
+        private ABCSocket intiSocketClass { get; set; }
         protected ApplicationDbContext _context { get; set; }
 
         public TwoSocketHandler(ApplicationDbContext context)
@@ -23,7 +23,14 @@ namespace Repo_EF.Repo_Method
             _context = context;
         }
 
-        public async void GetWebSocket(WebSocket webSocket, SocketType type, int SocketID)
+        public void Setup(ABCSocket SocketClass, WebSocket webSocket)
+        {
+            intiSocketClass = SocketClass;
+            ClassSocket = webSocket;
+            SocketHandle = new SocketsHandler();
+        }
+
+        public async void GetWebSocket(WebSocket webSocket, int SocketID)
         {   
 
             if(SocketHandle.IsForgienSocketExits(SocketID))
@@ -36,17 +43,11 @@ namespace Repo_EF.Repo_Method
                 ForgienSocket = await SocketHandle.GetForgienSocketAsync(SocketID);  
             }
 
-            socketClass.SetClassSocket(ClassSocket);
-            socketClass.SetForgeinSocket(ForgienSocket);
+            intiSocketClass.SetClassSocket(ClassSocket);
+            intiSocketClass.SetForgeinSocket(ForgienSocket);
 
-            socketClass.Run();
+            intiSocketClass.Run();
         }
 
-        public void Setup(ABCSocket SocketClass, WebSocket webSocket)
-        {
-            socketClass = SocketClass;
-            ClassSocket = webSocket;
-            SocketHandle = new SocketsHandler();
-        }
     }
 }
