@@ -3,7 +3,7 @@ using System.Net.WebSockets;
 
 namespace Repo_EF.Repo_Method
 {
-    internal class RoverSocket : ABCSocket
+    public class RoverSocket : ABCSocket
     {
         private WebSocket ClassSocket { get; set; }
         private WebSocketReceiveResult ClassResult { get; set; }
@@ -32,7 +32,7 @@ namespace Repo_EF.Repo_Method
             ClassSocket = ClassWebSocekt;
         }
 
-        public override void SetForgeinSocetk(WebSocket ForgienWebSocket)
+        public override void SetForgeinSocket(WebSocket ForgienWebSocket)
         {
             ForgienSocket = ForgienWebSocket;
         }

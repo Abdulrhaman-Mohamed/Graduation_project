@@ -116,7 +116,7 @@ namespace Repo_Core.Abstract
 
 
         public abstract void SetClassSocket(WebSocket ClassWebSocekt);
-        public abstract void SetForgeinSocetk(WebSocket ForgienWebSocket);
+        public abstract void SetForgeinSocket(WebSocket ForgienWebSocket);
         public abstract void CloseSocket(WebSocketReceiveResult result);
         public abstract void Run();
         public abstract Task SendBytes(byte[] Buffer);
