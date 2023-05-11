@@ -17,7 +17,7 @@ namespace Graduation_project.Controllers
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                socketsHandler.HandleFrontConnection(webSocket, sockets, type);
+                //socketsHandler.HandleFrontConnection(webSocket, sockets, type);
             }
         }
 

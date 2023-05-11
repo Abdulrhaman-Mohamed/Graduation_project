@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 
 namespace Repo_EF.Repo_Method
 {
-    public class SocketsHandler : ISocketsHandler
+    public class SocketsHandler
     {
         readonly private byte[] PingPongArray = new byte[] { 54, 57, 54, 57 };
         private WebSocket[] FrontSockets = new WebSocket[3];
