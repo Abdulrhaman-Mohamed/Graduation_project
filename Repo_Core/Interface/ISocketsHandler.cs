@@ -19,7 +19,8 @@ namespace Repo_Core.Interface
     public interface ISocketsHandler
     {
         public void SetSocket(WebSocket webSocket, int SocketID);
-        public Task isSocketAccepted(int SocketID);
-        public void CloseSocket(int SocketID);
+        public bool IsForgienSocketExits(int SocketID);
+        public WebSocket GetForgienSocket(int SocketID);
+        public Task<WebSocket> GetForgienSocketAsync(int SocketID);
     }
 }

@@ -1,181 +1,52 @@
 ﻿using Repo_Core.Interface;
 using Repo_Core.Models;
 using System;
+using System.Collections;
 using System.Net.WebSockets;
+using System.Runtime.ExceptionServices;
 
 namespace Repo_EF.Repo_Method
 {
-    public class SocketsHandler
+    public class SocketsHandler : ISocketsHandler
     {
-        readonly private byte[] PingPongArray = new byte[] { 54, 57, 54, 57 };
-        private WebSocket[] FrontSockets = new WebSocket[3];
-        private WebSocket[] RoverSockets = new WebSocket[3];
-        WebSocketReceiveResult RoverData;
-        WebSocketReceiveResult FrontData;
-        private readonly ApplicationDbContext _dbContext;
-        public SocketsHandler(ApplicationDbContext dbContext)
+        private Hashtable hashtable = new Hashtable();
+
+        public bool IsForgienSocketExits(int SocketID)
         {
-            _dbContext = dbContext;
+            if (hashtable.ContainsKey(SocketID))
+                return true;
+            return false;
         }
 
-        // this is PingPong Sockets only work for keepping sockets alive
-        protected async Task PingPong(WebSocket webSocket)
+        public WebSocket GetForgienSocket(int SocketID)
         {
-            await webSocket.SendAsync(
-                new ArraySegment<byte>(PingPongArray, 0, 4),
-                WebSocketMessageType.Text,
-                true,
-                CancellationToken.None);
-
-            //await webSocket.CloseAsync(
-            //    PingPongResults.CloseStatus.Value,
-            //    PingPongResults.CloseStatusDescription,
-            //    CancellationToken.None
-            //    );
+            return (WebSocket)hashtable[SocketID];
         }
-        // this method called to close socket that is opened
-        protected async Task CloseSocket(WebSocket webSocket, WebSocketReceiveResult webResult)
+
+        public void SetSocket(WebSocket webSocket, int SocketID)
         {
-            await webSocket.CloseAsync(
-                webResult.CloseStatus.Value,
-                webResult.CloseStatusDescription,
-                CancellationToken.None);
+            hashtable.Add(SocketID, webSocket);       
         }
 
 
-        // Use Front Buffer and Data to send data to Rover using Rover Sockets
-        protected async Task SendRoverData(byte[] Buffer, Sockets sockets)
+        // this is only called if the websocket doesn't exist
+        // you may use lock to controller access to the hashmap
+        // but the project right now only one object wait the forgien websocket to connect.
+        // and the other gets it directly.
+        // object that is waiting websocket to connect is responsable for deleteing the websocket from the hash after getting it.
+        public async Task<WebSocket> GetForgienSocketAsync(int SocketID)
         {
-            await RoverSockets[(int)sockets].SendAsync(
-                new ArraySegment<byte>(Buffer, 0, FrontData.Count),
-                FrontData.MessageType,
-                FrontData.EndOfMessage,
-                CancellationToken.None
-                );
-        }
-        
-        // Use Rover Buffer and Data to send data to Front using Front Sockets
-        protected async Task SendFrontData(byte[] Buffer,Sockets sockets)
-        {
-            await FrontSockets[(int)sockets].SendAsync(
-                new ArraySegment<byte>(Buffer, 0, RoverData.Count),
-                RoverData.MessageType,
-                RoverData.EndOfMessage,
-                CancellationToken.None
-                );
-        }
-
-        
-        protected async Task AcceptRoverData(WebSocket webSocket, byte[] Buffer)
-        {
-            RoverData = await webSocket.ReceiveAsync(
-                    new ArraySegment<byte>(Buffer),
-                    CancellationToken.None);
-        }
-
-        protected async Task AcceptFrontData(WebSocket webSocket, byte[] Buffer)
-        {
-            FrontData = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(Buffer),
-                CancellationToken.None);
-
-            // Serilize
-            // Save in Database
-        }
-
-
-        public void SetSocket(WebSocket webSocket, Sockets socket, SocketsType type) 
-        {
-            if(type == SocketsType.Front)
-                FrontSockets[(int)socket] = webSocket;
-            else
-                RoverSockets[(int)socket] = webSocket;
-        }
-        
-        public void ReleaseSocket(Sockets socket, SocketsType type) 
-        {
-            if(type == SocketsType.Front)
-                FrontSockets[(int)socket].Dispose();
-            else
-                RoverSockets[(int)socket].Dispose();
-        }
-
-
-        public async Task HandleFrontConnection(WebSocket webSocket, Sockets socket, SocketsType type)
-        {
-            byte[] Buffer = new byte[1024];
-            if(Sockets.BinarySocket == socket)
-                Buffer = new byte[(1024*1024*3)];
-
-            SetSocket(webSocket, socket, type);
-
-            do
+            while(true)
             {
-                // Data is handled using Data member
-                await AcceptRoverData(webSocket, Buffer);
-                // if size of buffer == 4 send pingpong
-                // Serilize or Des
-                // Save
-                await SendFrontData(Buffer, socket);
-                
-            } while (!RoverData.CloseStatus.HasValue);
+                if (IsForgienSocketExits(SocketID))
+                    break;
+                await Task.Delay(5000);  // Check if socket exist every 5 seconds
+            }
+            WebSocket webSocket = GetForgienSocket(SocketID);
+            await Task.Delay(1024);  // this line wait 1 second to ensure that the other object the is waiting the socket gets it before deleting it.
+            hashtable.Remove(SocketID);
+            return webSocket;
 
-            await CloseSocket(webSocket, RoverData);
-
-            ReleaseSocket(socket, type);
         }
-
-        public async Task HandleRoverConnection(WebSocket webSocket, Sockets socket, SocketsType type)
-        {
-            byte[] Buffer = new byte[1024];
-            if (Sockets.BinarySocket == socket)
-                Buffer = new byte[(1024 * 1024 * 3)];
-
-            SetSocket(webSocket, socket, type);
-
-            do
-            {
-                // Data is handled using Data member
-                await AcceptFrontData(webSocket, Buffer);
-                // Serilize or Des
-                // Save
-                await SendRoverData(Buffer, socket);
-
-            } while (!FrontData.CloseStatus.HasValue);
-
-            await CloseSocket(webSocket, FrontData);
-
-            ReleaseSocket(socket, type);
-        }
-
-        // DeSerializerBody from arduino
-        private PlanResult DeSerializerBody(byte[] DeSerializerBody)
-        {
-            // use Array.Reverse(PlanID, 0 ,PlanID.Length); if the DeSerializerBody array is in big-endian byte order 
-            PlanResult result = new PlanResult();
-
-            byte[] PlanID = new byte[2];
-            PlanID[0] = DeSerializerBody[0];
-            PlanID[1] = DeSerializerBody[1];
-            Array.Reverse(PlanID, 0, PlanID.Length);
-            int Id = BitConverter.ToInt32(PlanID, 0);
-
-
-
-            // save result in database Note :(implemention down)
-            SaveResultfromarduino(result);
-
-            // the reset of the code will be completed when you accept to a specific data format
-            return result;
-        }
-
-
-        // save result after DeSerializerBody
-        private PlanResult SaveResultfromarduino(PlanResult planResult)
-        {
-            _dbContext.PlanResults.AddAsync(planResult);
-            return planResult;
-        }
-
     }
 }

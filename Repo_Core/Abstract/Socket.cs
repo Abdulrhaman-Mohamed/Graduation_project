@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-struct AESData
+public struct AESData
 {
     byte[] IV;
     byte[] EncryptedData;
 }
-enum AckType
+
+public enum AckType
 {
     StartSetup,
     EndSetup,
@@ -26,7 +27,7 @@ enum AckType
     EndOnline
 };
 
-enum FrameType
+public enum FrameType
 {
     Plan,
     Command,
@@ -35,7 +36,7 @@ enum FrameType
     Image
 };
 
-struct Header
+public struct Header
 {
     FrameType Type;
     byte[] IV;
@@ -43,14 +44,14 @@ struct Header
     int FrameLength;
 }
 
-struct PlanBody
+public struct PlanBody
 {
     int NumberofPlans;
     int NumberofFrames;
     long Time;
 }
 
-struct CommandBody
+public struct CommandBody
 {
     int PlanID;
     int SequenceID;
@@ -60,27 +61,27 @@ struct CommandBody
     int CommandRepeat;
 }
 
-struct RequestBody
+public struct RequestBody
 {
     bool ACK;
     AckType Type;
 }
 
-struct RoverData
+public struct RoverData
 {
     int PlanID;
     int SequenceID;
     long Time;
 }
 
-struct ImageData
+public struct ImageData
 {
     int PlanID;
     int SequenceID;
     long Time;
 }
 
-struct SensorReadings
+public struct SensorReadings
 {
     int X;
     int Y;
@@ -98,7 +99,7 @@ Consider your specific requirements and performance considerations when deciding
 
 namespace Repo_Core.Abstract
 {
-    abstract class Socket
+    public abstract class ABCSocket
     {
         // Data Types and Parameter will change.
 
@@ -114,8 +115,9 @@ namespace Repo_Core.Abstract
         public abstract RequestBody DeserialiazationResponse(byte[] bytes);
 
 
-        public abstract void SetSocket(WebSocket webSocket, int SocketID);
-        public abstract void CloseSocket(int SocketID);
+        public abstract void SetClassSocket(WebSocket ClassWebSocekt);
+        public abstract void SetForgeinSocetk(WebSocket ForgienWebSocket);
+        public abstract void CloseSocket(WebSocketReceiveResult result);
         public abstract void Run();
         public abstract Task SendBytes(byte[] Buffer);
         public abstract Task AcceptBytes(byte[] Buffer);
