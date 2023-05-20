@@ -10,7 +10,6 @@ namespace Repo_EF.Repo_Method
         private WebSocket? ForgienSocket { get; set; }
         private WebSocketReceiveResult ClassResult { get; set; }
 
-        public FrontSocket() { }
 
         public override async Task AcceptBytes(byte[] Buffer)
         {
@@ -51,47 +50,6 @@ namespace Repo_EF.Repo_Method
         }
 
         public override void Run()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public override SensorReadings DeserialiazationData(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Header DeserialiazationHeader(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ImageData DeserialiazationImage(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override RequestBody DeserialiazationResponse(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override byte[] SerialiazationCommand(CommandBody command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override byte[] SerialiazationHeader(Header header)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override byte[] SerialiazationPlan(PlanBody plan)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override byte[] SerialiazationRequests(RequestBody request)
         {
             throw new NotImplementedException();
         }
