@@ -1,4 +1,6 @@
 ﻿using System.Text.RegularExpressions;
+using Repo_Core.Models;
+using Image = System.Drawing.Image;
 
 namespace Graduation_project.ViewModel
 {
@@ -23,5 +25,36 @@ namespace Graduation_project.ViewModel
             return regex.IsMatch(name);
         }
 
+        private static byte[] HexStringToBytes(string hexString)
+        {
+            // convert hex string to bytes  
+            byte[] bytes = new byte[hexString.Length / 2];
+            for (int i = 0; i < hexString.Length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+            }
+            return bytes;
+        }
+
+        public static string SaveBytes(string hexString, string folderName)
+        {
+            byte[] imageBytes = HexStringToBytes(hexString);
+            MemoryStream ms = new MemoryStream(imageBytes);
+
+            // generate image name 
+            var imageName = $"{Guid.NewGuid()}.jpg";
+
+
+            Image image = Image.FromStream(ms);
+
+            if (!Directory.Exists($"wwwroot/{folderName}"))
+                Directory.CreateDirectory($"wwwroot/{folderName}");
+
+            var path = $"wwwroot/{folderName}/{imageName}";
+
+            image.Save(path);
+
+            return path;
+        }
     }
 }

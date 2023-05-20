@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 using Repo_Core.Services;
 using Repo_Core.Identity_Models;
 using Repo_Core.Helper;
-using Repo_Core.Interface;
+using Graduation_project.ViewModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection"),
     o => o.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-    
+
 var conString = builder.Configuration.GetConnectionString("DeafultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
 
@@ -90,7 +90,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 
 app.Run();
