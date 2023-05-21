@@ -13,12 +13,12 @@ namespace Repo_EF.Repo_Method
             Context = context;
         }
 
-         public async Task<string> Addfeedback(Feedback feed)
+        public async Task<string> Addfeedback(Feedback feed)
         {
-            
+
             await Context.Feedbacks.AddAsync(feed);
             await Context.SaveChangesAsync();
-            return "Success"; 
+            return "Success";
         }
 
         public ICollection<Posts> GetPosts(int page, byte pagesize)
@@ -29,7 +29,10 @@ namespace Repo_EF.Repo_Method
                 pagesize = 10;
 
             int totalNumber = (page - 1) * pagesize;
-            return Context.Posts.Skip(totalNumber).Take(pagesize).ToList();
+            var posts = Context.Posts.OrderByDescending(t => t.id).Take(totalNumber).ToList();
+
+            return posts;
+
         }
 
         public async Task<int> Add(Posts blogs)
