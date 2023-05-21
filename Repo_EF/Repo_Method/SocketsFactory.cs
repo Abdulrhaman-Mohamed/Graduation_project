@@ -7,7 +7,7 @@ using System.Runtime.ExceptionServices;
 
 namespace Repo_EF.Repo_Method
 {
-    public class SocketsHandler : ISocketsHandler
+    public class SocketsFactory : ISocketsFactory
     {
         private Hashtable hashtable = new Hashtable();
 

@@ -16,7 +16,7 @@ namespace Repo_Core.Interface
         Rover
     }
 
-    public interface ISocketsHandler
+    public interface ISocketsFactory
     {
         public void SetSocket(WebSocket webSocket, int SocketID);
         public bool IsForgienSocketExits(int SocketID);

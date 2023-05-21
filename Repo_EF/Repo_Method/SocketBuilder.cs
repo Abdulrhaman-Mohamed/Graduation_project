@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 namespace Repo_EF.Repo_Method
 {
 
-    public class TwoSocketHandler : ITwoSocketHandler
+    public class SocketBuilder : ISocketBuilder
     {
-        private SocketsHandler SocketHandle;
+        private SocketsFactory SocketHandle;
         private WebSocket ClassSocket { get; set; }
         private WebSocket ForgienSocket { get; set; }
         private ABCSocket intiSocketClass { get; set; }
         protected ApplicationDbContext _context { get; set; }
 
-        public TwoSocketHandler(ApplicationDbContext context)
+        public SocketBuilder(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -27,7 +27,7 @@ namespace Repo_EF.Repo_Method
         {
             intiSocketClass = SocketClass;
             ClassSocket = webSocket;
-            SocketHandle = new SocketsHandler();
+            SocketHandle = new SocketsFactory();
         }
 
         public async void GetWebSocket(WebSocket webSocket, int SocketID)

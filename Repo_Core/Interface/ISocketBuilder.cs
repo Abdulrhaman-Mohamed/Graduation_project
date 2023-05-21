@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Repo_Core.Interface
 {
 
-    public interface ITwoSocketHandler
+    public interface ISocketBuilder
     {
         public void Setup(ABCSocket SocketClass, WebSocket webSocket);
         public void GetWebSocket(WebSocket webSocket, int SocketID);
