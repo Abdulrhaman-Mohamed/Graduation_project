@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repo_Core.Identity_Models;
 using Repo_Core.Services;
+using System.Collections;
 
 namespace Repo_EF.Repo_Method
 {
@@ -21,15 +22,27 @@ namespace Repo_EF.Repo_Method
             return "Success";
         }
 
-        public ICollection<Posts> GetPosts(int page, byte pagesize)
+        public ICollection GetPosts(int page, byte pagesize)
         {
             if (page <= 0)
                 page = 1;
             if (pagesize <= 0)
                 pagesize = 10;
 
-            int totalNumber = (page - 1) * pagesize;
-            var posts = Context.Posts.OrderByDescending(t => t.id).Take(totalNumber).ToList();
+            int totalNumber = (page) * pagesize;
+            var posts = Context.Posts.
+                Include(o => o.Images)
+                .Include(o => o.feedback)
+                .Include(o=>o.User)
+                .OrderByDescending(t => t.id).Take(totalNumber)
+                 .Select(o=> new {o.postContent ,
+                     o.feedback.SingleOrDefault().comment ,
+                     o.Images.SingleOrDefault().FakeName,
+                     o.postTitle,
+                     o.postDate,
+                     o.User.FirstName
+           
+                 }).ToList(); 
 
             return posts;
 
@@ -52,9 +65,9 @@ namespace Repo_EF.Repo_Method
                 try
                 {
 
-                    var name = Path.GetRandomFileName();
+                    
 
-                    string path = $"wwwroot/Upload/{name}";
+                    string path = $"wwwroot/Upload/{File.FileName}";
                     using (Stream stream = new FileStream(path, FileMode.Create))
                     {
                         File.CopyTo(stream);
@@ -62,7 +75,7 @@ namespace Repo_EF.Repo_Method
                     imagesAppend.Add(
                         new Images
                         {
-                            FakeName = name,
+                            FakeName = path,
                             Postsid = id,
                             ContentType = File.ContentType,
                             StoredFileName = File.FileName

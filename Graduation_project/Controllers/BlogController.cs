@@ -39,7 +39,7 @@ namespace Graduation_project.Controllers
             if (posts == null)
                 return NoContent();
             else
-             return Ok(posts.ToList());
+             return Ok(posts);
                       
         }
 
