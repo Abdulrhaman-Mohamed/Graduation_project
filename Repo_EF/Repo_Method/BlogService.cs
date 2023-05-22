@@ -36,8 +36,8 @@ namespace Repo_EF.Repo_Method
                 .Include(o=>o.User)
                 .OrderByDescending(t => t.id).Take(totalNumber)
                  .Select(o=> new {o.postContent ,
-                     o.feedback.SingleOrDefault().comment ,
-                     o.Images.SingleOrDefault().FakeName,
+                     comments = o.feedback.Select(f => f.comment),
+                     images = o.Images.Select(i => i.FakeName),
                      o.postTitle,
                      o.postDate,
                      o.User.FirstName
