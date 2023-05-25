@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
+﻿using System.Text.Json.Serialization;
 
 namespace Repo_Core.Models
 {
@@ -15,6 +9,7 @@ namespace Repo_Core.Models
         public int PlanSequenceNumber { get; set; }
         public int PlanId { get; set; }
         public virtual Plan? Plan { get; set; }
+        public virtual IEnumerable<RoverImage>? RoverImages { get; set; }
         public DateTime Time { get; set; }
         public string? Result { get; set; }
     }

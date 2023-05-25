@@ -61,11 +61,14 @@ namespace Repo_EF.Repo_Method
             List<Images> imagesAppend = new List<Images>();
             foreach (var File in strm)
             {
-
                 try
                 {
+<<<<<<< Updated upstream
 
                     
+=======
+                    var name = Path.GetRandomFileName();
+>>>>>>> Stashed changes
 
                     string path = $"wwwroot/Upload/{File.FileName}";
                     using (Stream stream = new FileStream(path, FileMode.Create))
@@ -82,7 +85,7 @@ namespace Repo_EF.Repo_Method
                         });
 
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
 
                     throw;

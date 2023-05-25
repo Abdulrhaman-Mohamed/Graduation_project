@@ -14,7 +14,7 @@ namespace Repo_Core.Identity_Models
 
         public virtual IEnumerable<Plan> Plans { get; set; }
 
-        public virtual IEnumerable<Feedback>? Feedbacks { get; set; }
+        public virtual IEnumerable<Feedback> Feedbacks { get; set; }
         public virtual IEnumerable<Posts>? Posts { get; set; }
 
     }

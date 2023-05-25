@@ -11,9 +11,10 @@ namespace Repo_Core.Identity_Models
         public DateTime postDate { get; set; }
         public virtual IEnumerable<Images>? Images { get; set; }
         public string UserId { get; set; }
-        
+
         public virtual ApplicationUser User { get; set; }
-       
+        public int FeedbackId { get; set; }
+
         public IEnumerable<Feedback>? feedback { get; set; }
 
     }

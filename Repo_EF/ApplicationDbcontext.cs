@@ -27,7 +27,7 @@ namespace Repo_EF
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<Images> Images { get; set; }
-
+        public virtual DbSet<RoverImage> RoverImages { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,13 @@ namespace Repo_EF
             // PlanResult 
             modelBuilder.Entity<PlanResult>()
                 .HasKey(c => new { c.Id, c.PlanId, c.PlanSequenceNumber });
+
+
+            // RoverImage
+            modelBuilder.Entity<RoverImage>()
+                .HasOne(c => c.PlanResult)
+                .WithMany(p => p.RoverImages)
+                .HasForeignKey(o => new { o.PlanResultId, o.PlanSequenceNumber, o.PlanId });
 
             // Acknowledge
             modelBuilder.Entity<Acknowledge>().HasKey(c => new { c.Id });
@@ -99,10 +106,15 @@ namespace Repo_EF
                 .HasOne(o => o.User)
                 .WithMany(o => o.Posts);
 
+
+            modelBuilder.Entity<Posts>()
+                .HasMany(o => o.feedback)
+                .WithOne(o => o.Post);
+
             modelBuilder.Entity<Plan>()
                 .HasOne(o => o.ApplicationUser)
                 .WithMany(o => o.Plans)
-                .HasForeignKey(o=> o.ApplicationUserid);
+                .HasForeignKey(o => o.ApplicationUserid);
 
 
             //Images
