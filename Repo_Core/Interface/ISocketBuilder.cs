@@ -13,6 +13,6 @@ namespace Repo_Core.Interface
     public interface ISocketBuilder
     {
         public void Setup(ABCSocket SocketClass, WebSocket webSocket);
-        public void GetWebSocket(WebSocket webSocket, int SocketID);
+        public void GetWebSocket(int SocketID);
     }
 }

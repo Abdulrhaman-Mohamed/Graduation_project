@@ -63,12 +63,8 @@ namespace Repo_EF.Repo_Method
             {
                 try
                 {
-<<<<<<< Updated upstream
-
-                    
-=======
+          
                     var name = Path.GetRandomFileName();
->>>>>>> Stashed changes
 
                     string path = $"wwwroot/Upload/{File.FileName}";
                     using (Stream stream = new FileStream(path, FileMode.Create))

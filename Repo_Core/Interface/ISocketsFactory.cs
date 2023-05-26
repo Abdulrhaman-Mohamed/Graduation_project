@@ -18,9 +18,11 @@ namespace Repo_Core.Interface
 
     public interface ISocketsFactory
     {
-        public void SetSocket(WebSocket webSocket, int SocketID);
-        public bool IsForgienSocketExits(int SocketID);
-        public WebSocket GetForgienSocket(int SocketID);
-        public Task<WebSocket> GetForgienSocketAsync(int SocketID);
+        public void SetClassSocket(WebSocket webSocket, int SocketID);
+        public void SetForginSocket(WebSocket webSocket, int SocketID);
+        public bool IsSocketExits(int SocketID);
+        public bool SocketWait(int SocketID);
+        public WebSocket GetSocket(int SocketID);
+        public Task<WebSocket> GetSocketAsync(int SocketID);
     }
 }

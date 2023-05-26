@@ -30,17 +30,19 @@ namespace Repo_EF.Repo_Method
             SocketHandle = new SocketsFactory();
         }
 
-        public async void GetWebSocket(WebSocket webSocket, int SocketID)
+        public async void GetWebSocket(int SocketID)
         {   
 
-            if(SocketHandle.IsForgienSocketExits(SocketID))
+            if(SocketHandle.IsSocketExits(SocketID))
             {
-                ForgienSocket = SocketHandle.GetForgienSocket(SocketID);
+                ForgienSocket = SocketHandle.GetSocket(SocketID);
+                SocketHandle.SetForginSocket(ClassSocket, SocketID);
             }
+
             else
             {
-                SocketHandle.SetSocket(webSocket, SocketID);
-                ForgienSocket = await SocketHandle.GetForgienSocketAsync(SocketID);  
+                SocketHandle.SetClassSocket(ClassSocket, SocketID);
+                ForgienSocket = await SocketHandle.GetSocketAsync(SocketID);  
             }
 
             intiSocketClass.SetClassSocket(ClassSocket);
