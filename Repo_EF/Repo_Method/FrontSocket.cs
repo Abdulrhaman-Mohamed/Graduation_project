@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualBasic;
 using Repo_Core.Abstract;
+using Repo_Core.Models;
 using System.Net.WebSockets;
+using System.Security.Cryptography;
 
 namespace Repo_EF.Repo_Method
 {
@@ -54,6 +56,43 @@ namespace Repo_EF.Repo_Method
             throw new NotImplementedException();
         }
 
+        protected async void StartOnline()
+        {
+            byte[] DataBuffer = new byte[64];
+
+            await AcceptBytes(DataBuffer);
+            byte[] DataBuffer2 = DataBuffer;
+
+            CommandBody body = new CommandBody();
+            body.PlanID = 0;
+            body.SequenceID = 0;
+            body.SubSystemID = 0;
+            body.CommandID = RoverMoveMap(DataBuffer2);
+            body.CommandRepeat = 1;
+            body.Delay = 1;
+            // Serialize Data
+
+            Header Header = new Header();
+            Header.Type = FrameType.Command;
+            Header.FrameLength = 16;
+            Aes myAes = Aes.Create();
+            Header.IV = myAes.IV;
+            // Calu CRC
+            // Header.CRC = CRC(DataBuffer2)
+            //Serialize Header
+            // Send SendBytes(DataBuffer2);
+
+        }
+
+        protected int RoverMoveMap(byte[] Key)
+        {
+            int Map = 0;
+            switch(Key[0])
+            {
+               
+            }
+            return Map;
+        }
 
     }
 }

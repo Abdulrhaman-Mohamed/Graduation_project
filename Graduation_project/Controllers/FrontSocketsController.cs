@@ -8,9 +8,10 @@ namespace Graduation_project.Controllers
     [ApiController]
     public class FrontSocketsController : ControllerBase
     {
-        private readonly ISocketsFactory socketsHandler;
+        private readonly ISocketBuilder SocketHandler;
         private readonly int RoverKey = 155632;
-        public FrontSocketsController(ISocketsFactory SocketHandler) { socketsHandler = SocketHandler; }
+
+        public FrontSocketsController(ISocketBuilder socketHandler) { SocketHandler = socketHandler; }
 
         private async Task HandleConnection(Sockets sockets, SocketsType type)
         {

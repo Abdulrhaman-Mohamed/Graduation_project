@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repo_Core.Abstract;
 using System.Net.WebSockets;
+using Repo_Core.Models;
+using System;
+using System.Text;
 
 namespace Repo_EF.Repo_Method
 {
@@ -19,13 +22,20 @@ namespace Repo_EF.Repo_Method
         private WebSocket ForgienSocket { get; set; }
         private WebSocketReceiveResult ClassResult { get; set; }
         private WebsocketStates Socketstate { get; set; }
+        private PlanResult PlanResultInstance = new PlanResult();
+
+        private readonly ApplicationDbContext _dbContext;
+        public RoverSocket(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public override async Task AcceptBytes(byte[] Buffer)
         {
             ClassResult = await ClassSocket.ReceiveAsync(
                 new ArraySegment<byte>(Buffer),
                 CancellationToken.None
-                ); ;
+                );
         }
 
         public override async Task SendBytes(byte[] Buffer)
@@ -90,12 +100,20 @@ namespace Repo_EF.Repo_Method
             byte[] DataBuffer = new byte[64];
 
             await AcceptBytes(DataBuffer);
-            Header header = DeserialiazationHeader(DataBuffer, 0);
-            if(header.Type == FrameType.Request)
+            byte[] DataBuffer2 = DataBuffer;
+            Header header = DeserialiazationHeader(DataBuffer2, 0);
+
+            if (header.Type == FrameType.Request)
             {
-
+                RequestBody requestBody = DeserialiazationResponse(DataBuffer2, 21);
+                if (requestBody.Type == AckType.EndTelemetry)
+                    Socketstate = WebsocketStates.SendPlan;
             }
-
+            else
+            {
+                PlanResult Result = BodyDeserialiazation(DataBuffer2, 21);
+                SaveResultfromarduino(Result);
+            }
         }
 
         protected void SendPlan(int PlanID)
@@ -103,34 +121,29 @@ namespace Repo_EF.Repo_Method
 
         }
 
-        protected void StartOnline()
+        protected async void StartOnline()
         {
+            byte[] DataBuffer = new byte[64];
 
+            await AcceptBytes(DataBuffer);
+            byte[] DataBuffer2 = DataBuffer;
+            Header header = DeserialiazationHeader(DataBuffer2, 0);
+            if (header.Type == FrameType.Image)
+            {
+            }
+            else
+            {
+                PlanResult Result = BodyDeserialiazation(DataBuffer2, 21);
+                SaveResultfromarduino(Result);
+                byte[] BytePlanResult = PlanResultToByte(Result);
+                SendBytes(DataBuffer2);
+            }
         }
 
-        protected byte[] HandleTelemetryRequset(byte[] Buffer, int index )
+        protected byte[] PlanResultToByte(PlanResult planResult)
         {
-            RequestBody requestBody = DeserialiazationResponse(Buffer, index);
-            if(requestBody.Type == AckType.EndTelemetry)
-            {
-                Socketstate = WebsocketStates.SendPlan;
-                //Header SendHeader = header;
-                //RequestBody request = new RequestBody();
-                //byte[] EncryptData = new byte[] { 0, (byte)AckType.EndTelemetry };
-                //AESData aesData = AESEncryption(EncryptData);
-                //SendHeader.IV = aesData.IV;
-                //SendHeader.CRC = CRC(aesData.EncryptedData);
-                //SendHeader.FrameLength = aesData.EncryptedData.Length;
-
-            }
-
-            return new byte[]{ 0,1};
-        }  
-        
-        protected byte[] HandleTelemetryData(byte[] Buffer, int index)
-        {
-
-            return new byte[] { 0, 1 };
+            byte[] BytePlanResult = Encoding.UTF8.GetBytes(string.Join(',', planResult.PlanSequenceNumber, planResult));
+            return BytePlanResult;
         }
 
         protected byte[] HandleSendPlanRequset(byte[] Buffer, int index)
@@ -164,6 +177,10 @@ namespace Repo_EF.Repo_Method
             return new byte[] { 0, 1 };
         }
 
-
+        private PlanResult SaveResultfromarduino(PlanResult planResult)
+        {
+            _dbContext.PlanResults.AddAsync(planResult);
+            return planResult;
+        }
     }
 }

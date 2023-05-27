@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
-
-
+using Repo_Core.Models;
 
 public struct AESData
 {
@@ -140,32 +139,17 @@ namespace Repo_Core.Abstract
             Header header = new Header();
 
             header.Type = (FrameType)bytes[StartIndex];
+            header.FrameLength = (int)(bytes[StartIndex + 1] << 8 | bytes[StartIndex + 2]);
+            header.CRC = (int)(bytes[StartIndex + 3] << 8 | bytes[StartIndex + 4]);
+            
             header.IV = new byte[16];
-            for (int i = StartIndex; i < (StartIndex + 16); i++)
+            for (int i = StartIndex; i < 16; i++)
             {
-                header.IV[i] = bytes[i + 1];
+                header.IV[i] = bytes[i + 5];
             }
-            header.CRC = (int)(bytes[StartIndex + 17] << 8 | bytes[StartIndex + 18]);
-            header.FrameLength = (int)(bytes[StartIndex + 19] << 8 | bytes[StartIndex + 20]);
             return header;
+        }
 
-        }
-        public SensorReadings DeserialiazationSensorData(byte[] bytes, int StartIndex)
-        {
-            SensorReadings sensorReadings = new SensorReadings();
-            sensorReadings.X = (int)(bytes[StartIndex] << 8 | bytes[StartIndex + 1]);
-            sensorReadings.Y = (int)(bytes[StartIndex + 2] << 8 | bytes[StartIndex + 3]);
-            sensorReadings.Z = (int)(bytes[StartIndex + 4] << 8 | bytes[StartIndex + 5]);
-            return sensorReadings;
-        }
-        public RoverData DeserialiazationBodyData(byte[] bytes, int StartIndex)
-        {
-            RoverData roverData = new RoverData();
-            roverData.PlanID = (int)(bytes[StartIndex] << 8 | bytes[StartIndex + 1]);
-            roverData.SequenceID = (int)(bytes[StartIndex + 2] << 8 | bytes[StartIndex + 3]);
-            roverData.Time = (long)((bytes[StartIndex + 4] << 24) | (bytes[StartIndex + 5] << 16) | (bytes[StartIndex + 6] << 8) | bytes[StartIndex + 7]);
-            return roverData;
-        }
         public RequestBody DeserialiazationResponse(byte[] bytes, int StartIndex)
         {
             RequestBody requestBody = new RequestBody();
@@ -174,6 +158,23 @@ namespace Repo_Core.Abstract
             return requestBody;
         }
         
+        public PlanResult BodyDeserialiazation(byte[] bytes, int StartIndex)
+        {
+            ulong TimeSeconds;
+            int X, Y, Z;
+            PlanResult planResult = new PlanResult();
+            planResult.PlanId = (int)(bytes[StartIndex] << 8 | bytes[StartIndex + 1]);
+            planResult.PlanSequenceNumber = (int)(bytes[StartIndex + 2]);
+            TimeSeconds = (ulong)((bytes[StartIndex + 3] << 24 | bytes[StartIndex + 4] << 16 | bytes[StartIndex + 5] << 8 | bytes[StartIndex + 6]));
+            // Calcualte Time 
+            X = (bytes[StartIndex + 7] << 8 | bytes[StartIndex + 8]);
+            Y = (bytes[StartIndex + 9] << 8 | (bytes[StartIndex + 10]));
+            Z = (bytes[StartIndex + 11] << 9 | (bytes[StartIndex + 12]));
+            planResult.Result = string.Join(",", X, Y, Z);
+            return planResult;
+        }
+
+
         // this well only return (PlanID, SequenceID, Time) you can discard this method or separate image from reset of the request
         public ImageData DeserialiazationImage(byte[] bytes, int StartIndex)
         { throw new NotImplementedException(); }
