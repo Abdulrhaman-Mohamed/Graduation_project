@@ -56,6 +56,7 @@ namespace Graduation_project.Controllers
                 files.postDate = strm.postDate;
                 files.UserId = strm.UserId;
             };
+
             var id = await _blogService.Add(files);
 
             if(strm.formFile != null )
