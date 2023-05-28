@@ -66,13 +66,13 @@ namespace Repo_EF.Repo_Method
             {
                 try
                 {
-                    string path = $"Community/Uploads/{folderName}/{File.FileName}";
+                    var name = Guid.NewGuid().ToString();
 
-                    var url = ImageUploader.getInstance().UploadImage(path, File);
+                    var url = ImageUploader.GetInstance().UploadImage(folderName, File);
                     imagesAppend.Add(
                         new Images
                         {
-                            FakeName = path,
+                            FakeName = name,
                             Postsid = id,
                             Url = url.Result,
                             ContentType = File.ContentType,
