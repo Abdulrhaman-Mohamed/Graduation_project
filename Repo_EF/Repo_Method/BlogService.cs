@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Repo_Core.Identity_Models;
 using Repo_Core.Services;
 using System.Collections;
+using Repo_EF.RepoEFUtil;
 
 namespace Repo_EF.Repo_Method
 {
@@ -33,16 +34,18 @@ namespace Repo_EF.Repo_Method
             var posts = Context.Posts.
                 Include(o => o.Images)
                 .Include(o => o.feedback)
-                .Include(o=>o.User)
+                .Include(o => o.User)
                 .OrderByDescending(t => t.id).Take(totalNumber)
-                 .Select(o=> new {o.postContent ,
+                 .Select(o => new
+                 {
+                     o.postContent,
                      comments = o.feedback.Select(f => f.comment),
                      images = o.Images.Select(i => i.FakeName),
                      o.postTitle,
                      o.postDate,
                      o.User.FirstName
-           
-                 }).ToList(); 
+
+                 }).ToList();
 
             return posts;
 
@@ -56,26 +59,22 @@ namespace Repo_EF.Repo_Method
             return blogs.id;
         }
 
-        public async Task<string> SaveImages(List<IFormFile> strm, int id)
+        public async Task<string> SaveImages(string folderName, List<IFormFile> strm, int id)
         {
             List<Images> imagesAppend = new List<Images>();
             foreach (var File in strm)
             {
                 try
                 {
-          
-                    var name = Path.GetRandomFileName();
+                    string path = $"Community/Uploads/{folderName}/{File.FileName}";
 
-                    string path = $"wwwroot/Upload/{File.FileName}";
-                    using (Stream stream = new FileStream(path, FileMode.Create))
-                    {
-                        File.CopyTo(stream);
-                    }
+                    var url = ImageUploader.getInstance().UploadImage(path, File);
                     imagesAppend.Add(
                         new Images
                         {
                             FakeName = path,
                             Postsid = id,
+                            Url = url.Result,
                             ContentType = File.ContentType,
                             StoredFileName = File.FileName
                         });

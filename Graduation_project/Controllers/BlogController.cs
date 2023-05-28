@@ -1,14 +1,10 @@
 ﻿using Repo_Core.Identity_Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repo_Core;
-
 using Repo_Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Graduation_project.ViewModel;
 using Repo_EF;
-using System.IO;
 using AutoMapper;
+using Google.Cloud.Storage.V1;
 
 namespace Graduation_project.Controllers
 {
@@ -23,8 +19,8 @@ namespace Graduation_project.Controllers
         private readonly IBlogService _blogService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        private readonly ApplicationDbContext dbContext ;
-        public BlogController(IBlogService blogService, IWebHostEnvironment webHostEnvironment , ApplicationDbContext _dbContext,IMapper mapper)
+        private readonly ApplicationDbContext dbContext;
+        public BlogController(IBlogService blogService, IWebHostEnvironment webHostEnvironment, ApplicationDbContext _dbContext, IMapper mapper)
         {
             _blogService = blogService;
             _webHostEnvironment = webHostEnvironment;
@@ -39,15 +35,16 @@ namespace Graduation_project.Controllers
             if (posts == null)
                 return NoContent();
             else
-             return Ok(posts);
-                      
+                return Ok(posts);
+
         }
 
         [HttpPost("Images")]
-        public async Task<IActionResult> CreateAsync([FromForm] PostsDtos strm )
+        public async Task<IActionResult> CreateAsync([FromForm] PostsDtos strm)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest("There are something lost");
+
 
             Posts files = new Posts();
             {
@@ -59,8 +56,8 @@ namespace Graduation_project.Controllers
 
             var id = await _blogService.Add(files);
 
-            if(strm.formFile != null )
-                await _blogService.SaveImages(strm.formFile, id);
+            if (strm.formFile != null)
+                await _blogService.SaveImages(strm.postTitle, strm.formFile, id);
 
             return Ok();
         }
@@ -70,16 +67,16 @@ namespace Graduation_project.Controllers
         public async Task<IActionResult> Addfeedback([FromBody] FeedbackView feedback)
         {
             var feedback1 = _mapper.Map<Feedback>(feedback);
-            var map =await _blogService.Addfeedback(feedback1);
+            var map = await _blogService.Addfeedback(feedback1);
             return Ok(map);
-            
+
         }
 
         //delete Posts
         [HttpGet("Delete Post")]
         public IActionResult DeletePosts(int postId)
         {
-             
+
             return Ok(_blogService.DeletePosts(postId));
         }
 

@@ -10,6 +10,6 @@ namespace Repo_Core.Services
         Task<int> Add(Posts blogs);
         string DeletePosts(int postId);
         Task<string> Addfeedback(Feedback feed);
-        Task<String> SaveImages(List<IFormFile> strm , int id );
+        Task<string> SaveImages(string folderName, List<IFormFile> strm, int id);
     }
 }
