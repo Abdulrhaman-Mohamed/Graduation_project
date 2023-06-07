@@ -5,6 +5,9 @@ using System.Net.WebSockets;
 using Repo_Core.Models;
 using System;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics.Metrics;
+using System.Drawing;
 
 namespace Repo_EF.Repo_Method
 {
@@ -94,7 +97,26 @@ namespace Repo_EF.Repo_Method
             }
         }
 
-
+        public override async Task RunTest()
+        {
+            var buffer = new byte[1024];
+            //await SendBytes(new byte[] { 69, 57 });
+            //await ForgienSocket.SendAsync(
+            //new ArraySegment<byte>(new byte[] { 55, 57 }, 0, 2),
+            //WebSocketMessageType.Text,
+            //true,
+            //CancellationToken.None
+            //);
+            await AcceptBytes(buffer);
+            //var re = await ClassSocket.ReceiveAsync(
+            //    new ArraySegment<byte>(buffer), CancellationToken.None);
+            Console.WriteLine("Wait Rover");
+            while (!ClassResult.CloseStatus.HasValue)
+            {
+                await SendBytes(buffer);
+                await AcceptBytes(buffer);
+            }
+        }
         protected async void AcceptTelemetery()
         {
             byte[] DataBuffer = new byte[64];
@@ -123,20 +145,33 @@ namespace Repo_EF.Repo_Method
 
         protected async void StartOnline()
         {
-            byte[] DataBuffer = new byte[64];
-
+            byte[] DataBuffer = new byte[10240];
+            var imageBuffer = new List<byte>();
             await AcceptBytes(DataBuffer);
-            byte[] DataBuffer2 = DataBuffer;
-            Header header = DeserialiazationHeader(DataBuffer2, 0);
+            Header header = DeserialiazationHeader(DataBuffer, 0);
             if (header.Type == FrameType.Image)
             {
+                imageBuffer.AddRange(DataBuffer);
+                while(!Encoding.UTF8.GetString(DataBuffer).Contains("done"))
+                {
+                    await AcceptBytes(DataBuffer);
+                    imageBuffer.AddRange(DataBuffer);
+                }
+
+                //using (MemoryStream ms = new MemoryStream(imageBuffer.ToArray()))
+                //{
+                //    System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+                //    image.Save($"P{Guid.NewGuid()}.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                //}
+                await SendBytes(imageBuffer.ToArray());
             }
+
             else
             {
-                PlanResult Result = BodyDeserialiazation(DataBuffer2, 21);
+                PlanResult Result = BodyDeserialiazation(DataBuffer, 21);
                 SaveResultfromarduino(Result);
                 byte[] BytePlanResult = PlanResultToByte(Result);
-                SendBytes(DataBuffer2);
+                await SendBytes(BytePlanResult);
             }
         }
 

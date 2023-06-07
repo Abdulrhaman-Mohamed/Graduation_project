@@ -12,7 +12,7 @@ namespace Repo_EF.Repo_Method
 
     public class SocketBuilder : ISocketBuilder
     {
-        private SocketsFactory SocketHandle;
+        private ISocketsFactory SocketHandle;
         private WebSocket ClassSocket { get; set; }
         private WebSocket ForgienSocket { get; set; }
         private ABCSocket intiSocketClass { get; set; }
@@ -23,11 +23,11 @@ namespace Repo_EF.Repo_Method
             _context = context;
         }
 
-        public void Setup(ABCSocket SocketClass, WebSocket webSocket)
+        public void Setup(ABCSocket SocketClass, WebSocket webSocket, ISocketsFactory socketHandler)
         {
             intiSocketClass = SocketClass;
             ClassSocket = webSocket;
-            SocketHandle = new SocketsFactory();
+            SocketHandle = socketHandler;
         }
 
         public async void GetWebSocket(int SocketID)
@@ -48,7 +48,7 @@ namespace Repo_EF.Repo_Method
             intiSocketClass.SetClassSocket(ClassSocket);
             intiSocketClass.SetForgeinSocket(ForgienSocket);
 
-            intiSocketClass.Run();
+            await intiSocketClass.RunTest();
         }
 
     }

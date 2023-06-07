@@ -12,7 +12,7 @@ namespace Repo_Core.Interface
 
     public interface ISocketBuilder
     {
-        public void Setup(ABCSocket SocketClass, WebSocket webSocket);
+        public void Setup(ABCSocket SocketClass, WebSocket webSocket, ISocketsFactory socketHandler);
         public void GetWebSocket(int SocketID);
     }
 }

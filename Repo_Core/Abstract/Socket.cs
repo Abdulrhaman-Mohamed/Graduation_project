@@ -5,7 +5,6 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using System.Text;
 using Repo_Core.Models;
 
 public struct AESData
@@ -113,6 +112,7 @@ namespace Repo_Core.Abstract
         public abstract void Run();
         public abstract Task SendBytes(byte[] Buffer);
         public abstract Task AcceptBytes(byte[] Buffer);
+        public abstract Task RunTest();
 
         public int CRC(byte[] bytes)
         {
@@ -189,7 +189,6 @@ namespace Repo_Core.Abstract
                 throw new ArgumentNullException("Key");
             if (IV == null || IV.Length <= 0)
                 throw new ArgumentNullException("IV");
-            byte[] encrypted;
 
             // Create an Aes object
             // with the specified key and IV.
@@ -210,9 +209,6 @@ namespace Repo_Core.Abstract
                     }
                 }
             }
-
-            // Return the encrypted bytes from the memory stream.
-            return encrypted;
         }
 
         protected byte[] DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)

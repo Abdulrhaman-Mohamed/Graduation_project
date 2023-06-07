@@ -22,7 +22,7 @@ namespace Repo_EF.Repo_Method
         public ICreatePlan CreatePlan { get; }
         public IPlayBack PlayBack { get; }
         public IPlan PlanMethods { get; set; }
-        public ISocketBuilder twoSocketHandlerWrappers { get; }
+        //public ISocketBuilder SocketBuild { get; set; }
 
 
         public UnitWork(ApplicationDbContext dbContext)
@@ -40,7 +40,7 @@ namespace Repo_EF.Repo_Method
             PlayBack = new PlayBack(_dbContext);
             PlanMethods = new PlanMethods(_dbContext);
             CreatePlan = new CreatePlan(_dbContext);
-            twoSocketHandlerWrappers = new SocketBuilder(_dbContext);
+            //SocketBuild = new SocketBuilder(_dbContext);
 
         }
 

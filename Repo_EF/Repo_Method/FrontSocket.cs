@@ -56,6 +56,26 @@ namespace Repo_EF.Repo_Method
             throw new NotImplementedException();
         }
 
+        public override async Task RunTest()
+        {
+            var buffer = new byte[1024];
+            //await SendBytes(new byte[] { 69, 57 }, 0, 2);
+            //await ForgienSocket.SendAsync(
+            //new ArraySegment<byte>(new byte[] { 69, 57 }, 0, 2),
+            //WebSocketMessageType.Text,
+            //true,
+            //CancellationToken.None
+            //);
+            await AcceptBytes(buffer);
+            //var re = await ClassSocket.ReceiveAsync(
+            //    new ArraySegment<byte>(buffer), CancellationToken.None);
+            Console.WriteLine("Wait Rover");
+            while (!ClassResult.CloseStatus.HasValue)
+            {
+                await SendBytes(buffer);
+                await AcceptBytes(buffer);
+            }
+        }
         protected async void StartOnline()
         {
             byte[] DataBuffer = new byte[64];

@@ -12,6 +12,9 @@ namespace Repo_EF.Repo_Method
         private Hashtable ClassTable = new Hashtable();
         private Hashtable ForginTable = new Hashtable();
 
+        public SocketsFactory()
+        {
+        }
         public bool IsSocketExits(int SocketID)
         {
             if (ClassTable.ContainsKey(SocketID))
@@ -54,10 +57,9 @@ namespace Repo_EF.Repo_Method
             {
                 if (SocketWait(SocketID))
                     break;
-                await Task.Delay(5000);  // Check if socket exist every 5 seconds
             }
             WebSocket webSocket = (WebSocket)ForginTable[SocketID];
-            await Task.Delay(1024);  // this line wait 1 second to ensure that the other object the is waiting the socket gets it before deleting it.
+            //await Task.Delay(1024);  // this line wait 1 second to ensure that the other object the is waiting the socket gets it before deleting it.
             ForginTable.Remove(SocketID);
             return webSocket;
 
