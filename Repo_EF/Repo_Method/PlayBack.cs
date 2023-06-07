@@ -19,7 +19,11 @@ namespace Repo_EF.Repo_Method
 
         public async Task<IEnumerable<PlanResult>> GetByDate(DateTime date)
         {
-            var plan = _context.PlanResults.Include("Plan");
+            var plan = _context.PlanResults
+                .Include(p => p.Plan.Command)
+                .Include(p => p.Plan.Acknowledge)
+                .Include(p => p.Plan.Command.SubSystem)
+                .Include("RoverImages");
 
             var plans = await plan
                 .Where(p =>
@@ -28,16 +32,33 @@ namespace Repo_EF.Repo_Method
                     && p.Time.Day == date.Day).ToListAsync();
             return plans;
         }
-
-        public async Task<PlanResult?> GetPlanResultByPlanName(string name)
+        public async Task<IEnumerable<PlanResult>> GetById(int id)
         {
-            var plan = _context.PlanResults.Include(p => p.Plan);
+            var planResultQuery = _context.PlanResults
+                .Include(p => p.Plan.Command)
+                .Include(p => p.Plan.Acknowledge)
+                .Include(p => p.Plan.Command.SubSystem)
+                .Include("RoverImages");
+
+            var planResult = await planResultQuery.Where(p => p.PlanId == id).ToListAsync();
+            return planResult;
+        }
+
+
+        public async Task<IEnumerable<PlanResult>> GetPlanResultByPlanName(string name)
+        {
+            var planResultQuery = _context.PlanResults
+                .Include(p => p.Plan)
+                .Include(p => p.Plan.Command)
+                .Include(p => p.Plan.Acknowledge)
+                .Include(p => p.Plan.Command.SubSystem)
+                .Include("RoverImages");
 
             var query = name.ToLower().Trim();
 
-            var result = await plan.FirstOrDefaultAsync(
+            var result = await planResultQuery.Where(
                 p => p.Plan.Name.ToLower().Trim().Equals(query)
-                );
+                ).ToListAsync();
 
             return result;
         }

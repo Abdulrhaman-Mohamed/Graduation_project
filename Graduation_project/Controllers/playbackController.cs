@@ -5,6 +5,7 @@ using Repo_Core;
 using System;
 using Castle.Core.Internal;
 using Repo_Core.Models;
+using System.Drawing;
 
 namespace Graduation_project.Controllers
 {
@@ -20,14 +21,25 @@ namespace Graduation_project.Controllers
         }
 
 
-        [HttpGet("GetPlayBack")]
-        public IActionResult GetPlayBack(int id)
+        [HttpGet("GetPlayBackById")]
+        public async Task<IActionResult> GetPlayBack(int id)
         {
-            var plan = _unitWork.Plans.GetPlan(o => o.Id == id,
-                     new[] { "Command", "Command.SubSystem" })
-                 .Select(o => new { o.SequenceNumber, o.Command?.SubSystem?.SubSystemName, o.Command?.Description });
-            var result = _unitWork.PlanResults.GetListbyid(o => o.PlanId == id);
-            return Ok(new { plan, result });
+            if (id < 0)
+                return BadRequest(new { message = "Invalid input" });
+
+            var plans = await _unitWork.PlayBack.GetById(id);
+            if (plans.IsNullOrEmpty()) return NotFound();
+
+            var response = plans.Select(p => new
+            {
+                p.Plan?.Name,
+                p.Plan?.Command?.SubSystem?.SubSystemName,
+                p.Plan?.Command?.Description,
+                p.Result,
+                p.Plan?.Acknowledge,
+                p.RoverImages
+            });
+            return Ok(new { response });
 
         }
 
@@ -44,7 +56,11 @@ namespace Graduation_project.Controllers
             var response = plans.Select(p => new
             {
                 p.Plan?.Name,
-                p.Result
+                p.Plan?.Command?.SubSystem?.SubSystemName,
+                p.Plan?.Command?.Description,
+                p.Result,
+                p.Plan?.Acknowledge,
+                p.RoverImages
             });
             return Ok(new { response });
         }
@@ -52,12 +68,16 @@ namespace Graduation_project.Controllers
         [HttpGet("GetPlanResultByName")]
         public async Task<IActionResult> GetPlanResultByName(string name)
         {
-            var planResult = new PlanResult();
+
+            if (name.IsNullOrEmpty())
+                return BadRequest(new { message = "Invalid input" });
+
+            IEnumerable<PlanResult> planResult = null;
 
             if (Util.ValidateName(name))
                 planResult = await _unitWork.PlayBack.GetPlanResultByPlanName(name);
 
-            if (planResult?.Plan == null) return NotFound();
+            if (planResult.IsNullOrEmpty()) return NotFound();
 
             return Ok(new { planResult });
 
