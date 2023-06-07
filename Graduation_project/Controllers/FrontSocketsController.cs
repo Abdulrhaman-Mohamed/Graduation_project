@@ -12,91 +12,46 @@ namespace Graduation_project.Controllers
     [ApiController]
     public class FrontSocketsController : ControllerBase
     {
-        private readonly ISocketBuilder SocketHandler;
-        private readonly ISocketsFactory Factory;
-        private RoverSocket RSocket;
-        private FrontSocket FSocket;
-        private readonly int RoverKey = 155632;
-        private readonly ApplicationDbContext dbContext;
+        private ISocketHandler _socketHandler;
 
-        public FrontSocketsController(ISocketBuilder socketHandler, ISocketsFactory factory,ApplicationDbContext _dbContext) 
-        { 
-            SocketHandler = socketHandler;
-            Factory = factory;
-            dbContext = _dbContext;
+        public FrontSocketsController(ISocketHandler SocketHandler)
+        {
+            _socketHandler = SocketHandler;
         }
 
-        private async Task HandleConnection(Sockets sockets, SocketsType type, int SocketID)
+        private async Task _HandleConnection(SocketType Type)
         {
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                if (type == SocketsType.Front)
-                {
-                    FSocket = new FrontSocket();
-                    SocketHandler.Setup(FSocket, webSocket, Factory);
-                    SocketHandler.GetWebSocket(SocketID);
-                }
-                else
-                {
-                    RSocket = new RoverSocket(dbContext);
-                    SocketHandler.Setup(RSocket, webSocket, Factory);
-                    SocketHandler.GetWebSocket(SocketID);
-                }
+                _socketHandler.SetSocket(Type, webSocket);
+                await _socketHandler.RunOnline(Type);
             }
         }
 
-        // Front to Back Sockets
         [HttpGet("Video")]
-        public async Task<IActionResult> FrontVideo()
+        public async Task FrontVideo()
         {
-            if(HttpContext.WebSockets.IsWebSocketRequest) { HandleConnection(Sockets.BinarySocket, SocketsType.Front, 3); }
-            return Ok();
+            await _HandleConnection(SocketType.Image);
         }
 
         [HttpGet("Data")]
-        public async Task<IActionResult> FrontData()
+        public async Task FrontData()
         {
-            if(HttpContext.WebSockets.IsWebSocketRequest) { HandleConnection(Sockets.DataSocket, SocketsType.Front, 5);  }
-            return Ok();
+            await _HandleConnection(SocketType.Data);
         }
 
-        // this endpoint need some changes to work
-        // this endpoint will send data from Front to Rover
-        // so i should call AcceptData from SocketHandler class to send bytes
-        // or add method in this class to hanlde it for you
-        [HttpGet("RoverController")]
-        public async Task<IActionResult> FrontController()
-        {
-            HandleConnection(Sockets.ControllerSokcet, SocketsType.Front, 7);
-            return Ok();
-        }
-
-        // Rover to Back Sockets
         [HttpGet("RoverVideo")]
-        public async Task<IActionResult> RoverVideo()
+        public async Task RoverVideo()
         {
-            //if (Key == RoverKey)
-            {
-                HandleConnection(Sockets.BinarySocket, SocketsType.Rover, 3);
-                return Ok();
-                //}
-                //else
-                //   return BadRequest();
-            }
+            await _HandleConnection( SocketType.RoverImage);
         }
 
         [HttpGet("RoverData")]
-        public async Task<IActionResult> RoverData()
+        public async Task RoverData()
         {
-                //if (Key == RoverKey)
-                //{
-                HandleConnection(Sockets.DataSocket, SocketsType.Rover, 5);
-                return Ok();
-                //}
-                //else
-                //    return BadRequest();
-         }
+            await _HandleConnection(SocketType.RoverData);
+        }
 
     }
 }
