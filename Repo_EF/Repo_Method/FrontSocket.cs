@@ -6,14 +6,14 @@ using System.Security.Cryptography;
 
 namespace Repo_EF.Repo_Method
 {
-    public class FrontSocket : ABCSocket
+    public class FrontSocket
     {
         private WebSocket? ClassSocket { get; set; }
         private WebSocket? ForgienSocket { get; set; }
         private WebSocketReceiveResult ClassResult { get; set; }
 
 
-        public override async Task AcceptBytes(byte[] Buffer)
+        public  async Task AcceptBytes(byte[] Buffer)
         {
             ClassResult = await ClassSocket.ReceiveAsync(
                 new ArraySegment<byte>(Buffer),
@@ -22,7 +22,7 @@ namespace Repo_EF.Repo_Method
                 
         }
 
-        public override async Task SendBytes(byte[] Buffer)
+        public  async Task SendBytes(byte[] Buffer)
         {
             await ForgienSocket.SendAsync(
                 new ArraySegment<byte>(Buffer, 0, ClassResult.Count),
@@ -32,17 +32,17 @@ namespace Repo_EF.Repo_Method
             );
         }
 
-        public override void SetClassSocket(WebSocket ClassWebSocekt)
+        public  void SetClassSocket(WebSocket ClassWebSocekt)
         {
             ClassSocket = ClassWebSocekt;
         }
 
-        public override void SetForgeinSocket(WebSocket ForgienWebSocket)
+        public  void SetForgeinSocket(WebSocket ForgienWebSocket)
         {
             ForgienSocket = ForgienWebSocket;
         }
 
-        public override async void CloseSocket()
+        public  async void CloseSocket()
         {
             await ClassSocket.CloseAsync(
                 ClassResult.CloseStatus.Value,
@@ -51,12 +51,12 @@ namespace Repo_EF.Repo_Method
             ClassSocket.Dispose();
         }
 
-        public override void Run()
+        public  void Run()
         {
             throw new NotImplementedException();
         }
 
-        public override async Task RunTest()
+        public  async Task RunTest()
         {
             var buffer = new byte[1024];
             //await SendBytes(new byte[] { 69, 57 }, 0, 2);

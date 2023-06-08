@@ -7,12 +7,15 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Drawing;
 using System.Text;
+using Repo_Core.Models;
+using Repo_Core.Abstract;
 
 namespace Repo_EF.Repo_Method
 {
     public class SocketHandler : ISocketHandler
     {
         private Hashtable _socketsTable = new Hashtable();
+        private ABCSocket _socketHanlder = new ABCSocket();
 
         public SocketHandler()
         {
@@ -34,7 +37,10 @@ namespace Repo_EF.Repo_Method
         private async Task _dataType(SocketType Type)
         {
             AcceptData data = new AcceptData();
+            PlanResult plan = new PlanResult();
+            CommandBody command = new CommandBody();
             byte[] buffer = new byte[1024];
+            byte[] bytesEncoder;
             bool SendFirstTime = true;
 
             while (true)
@@ -42,28 +48,32 @@ namespace Repo_EF.Repo_Method
                 if (!(_socketsTable.ContainsKey(SocketType.Data) && _socketsTable.ContainsKey(SocketType.RoverData)))
                     continue;        
 
-                if(SendFirstTime)
-                {
-                    WebSocketReceiveResult result = new WebSocketReceiveResult(2, WebSocketMessageType.Text, true);
-                    await _SendData((WebSocket)_socketsTable[SocketType.Data], result, new byte[] { 60,61});
-                    await _SendData((WebSocket)_socketsTable[SocketType.RoverData], result, new byte[] { 69, 90 });
-                    SendFirstTime= false;
-                }
-
                 if(Type == SocketType.RoverData)
                 {
                     data = await _RecieveData((WebSocket)_socketsTable[SocketType.RoverData], buffer);
                     if (data.Result.CloseStatus.HasValue)
                         break;
-              
-                    await _SendData((WebSocket)_socketsTable[SocketType.Data], data.Result, buffer);
+
+                    plan = _socketHanlder.BodyDeserialiazation(data.Bytes, 21);
+                    bytesEncoder = Encoding.UTF8.GetBytes(string.Join(',', plan.PlanSequenceNumber, plan.Result));
+                    WebSocketReceiveResult result = new WebSocketReceiveResult(bytesEncoder.Length, WebSocketMessageType.Text, true);
+                    await _SendData((WebSocket)_socketsTable[SocketType.Data], result, bytesEncoder);
                 }
                 else
                 {
                     data = await _RecieveData((WebSocket)_socketsTable[SocketType.Data], buffer);
                     if (data.Result.CloseStatus.HasValue)
                         break;
-                    await _SendData((WebSocket)_socketsTable[SocketType.RoverData], data.Result, buffer);
+
+                    command.PlanID = 0;
+                    command.SequenceID= 0;
+                    command.CommandID = (int)buffer[0];
+                    command.SubSystemID = 5;
+                    command.Delay = 1;
+                    command.CommandRepeat = 1;
+                    bytesEncoder = _socketHanlder.SerialiazationCommand(command);
+                    WebSocketReceiveResult result = new WebSocketReceiveResult(7, WebSocketMessageType.Text, true);
+                    await _SendData((WebSocket)_socketsTable[SocketType.RoverData], result, bytesEncoder);
                 }
             }
 
@@ -76,7 +86,7 @@ namespace Repo_EF.Repo_Method
             AcceptData data = new AcceptData();
             List<byte> imageBuffer = new List<byte>();
             int imageSize = 0;
-            byte[] buffer = new byte[1024 * 10];
+            byte[] buffer = new byte[1024];
 
             while (true)
             {

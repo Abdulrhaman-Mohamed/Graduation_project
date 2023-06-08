@@ -28,14 +28,14 @@ public enum AckType
     EndOnline
 };
 
-public enum FrameType
-{
-    Plan,
-    Command,
-    Request,
-    Data,
-    Image
-};
+    public enum FrameType
+    {
+        Plan,
+        Command,
+        Request,
+        Data,
+        Image
+    };
 
 public struct Header
 {
@@ -100,19 +100,10 @@ Consider your specific requirements and performance considerations when deciding
 
 namespace Repo_Core.Abstract
 {
-    public abstract class ABCSocket
+    public class ABCSocket
     {
         // Data Types and Parameter will change.
         readonly private byte[] key = new byte[] { 0x00, 0x01, 0xA2, 0x03, 0xB4, 0x15, 0x06, 0xF5, 0xFF, 0x09, 0xF0, 0x0B, 0x9C, 0x0D, 0x0E, 0x0F };
-
-
-        public abstract void SetClassSocket(WebSocket ClassWebSocekt);
-        public abstract void SetForgeinSocket(WebSocket ForgienWebSocket);
-        public abstract void CloseSocket();
-        public abstract void Run();
-        public abstract Task SendBytes(byte[] Buffer);
-        public abstract Task AcceptBytes(byte[] Buffer);
-        public abstract Task RunTest();
 
         public int CRC(byte[] bytes)
         {
@@ -125,13 +116,47 @@ namespace Repo_Core.Abstract
         }
 
         public byte[] SerialiazationHeader(Header header)
-        { throw new NotImplementedException(); }
+        {
+            byte[] bytes = new byte[21];
+            byte[] temp = new byte[2];
+            bytes[0] = (byte)header.Type;
+            temp = _DivideTwoByte(header.FrameLength);
+            bytes[1] = temp[0];
+            bytes[2] = temp[1];
+            temp = _DivideTwoByte(header.CRC);
+            bytes[3] = temp[0];
+            bytes[4] = temp[1];
+
+            for(int i = 0; i < 16; i++)
+                bytes[5+i] = (byte)i;
+
+            return bytes;
+        }
+
         public byte[] SerialiazationPlan(PlanBody plan)
         { throw new NotImplementedException(); }
         public byte[] SerialiazationCommand(CommandBody command)
-        { throw new NotImplementedException(); }
+        {
+            byte[] bytes = new byte[7];
+            byte[] temp = new byte[2];
+
+            temp = _DivideTwoByte(command.PlanID);
+            bytes[0] = temp[0];
+            bytes[1] = temp[1];
+            bytes[2] = (byte)command.SequenceID;
+            bytes[3] = (byte)command.SubSystemID;
+            bytes[4] = (byte)command.CommandID;
+            bytes[5] = (byte)command.Delay;
+            bytes[6] = (byte)command.CommandRepeat;
+            return bytes;
+        }
         public byte[] SerialiazationRequests(RequestBody request)
-        { throw new NotImplementedException(); }
+        {
+            byte[] bytes = new byte[2];
+            bytes[0] = (byte)(request.ACK ? 1 : 0);
+            bytes[1] = (byte)request.Type;
+            return bytes;
+        }
 
 
         public Header DeserialiazationHeader(byte[] bytes, int StartIndex)
@@ -163,6 +188,7 @@ namespace Repo_Core.Abstract
             ulong TimeSeconds;
             int X, Y, Z;
             PlanResult planResult = new PlanResult();
+
             planResult.PlanId = (int)(bytes[StartIndex] << 8 | bytes[StartIndex + 1]);
             planResult.PlanSequenceNumber = (int)(bytes[StartIndex + 2]);
             TimeSeconds = (ulong)((bytes[StartIndex + 3] << 24 | bytes[StartIndex + 4] << 16 | bytes[StartIndex + 5] << 8 | bytes[StartIndex + 6]));
@@ -178,9 +204,52 @@ namespace Repo_Core.Abstract
         // this well only return (PlanID, SequenceID, Time) you can discard this method or separate image from reset of the request
         public ImageData DeserialiazationImage(byte[] bytes, int StartIndex)
         { throw new NotImplementedException(); }
+        
+        public AESData AESEncryption(byte[] Data)
+        {
+            AESData aesData = new AESData();
+            int paddedLength = (Data.Length / 16 + 1) * 16;
+            byte[] paddedBytes = new byte[paddedLength];
+            Array.Copy(Data, paddedBytes, Data.Length);
+            aesData.IV = new byte[16];
+            
+            using (Aes myAes = Aes.Create())
+            {
+                myAes.KeySize = key.Length * 8;
+                myAes.Key= key;
+                myAes.GenerateIV();
 
+                aesData.IV = myAes.IV;
+                aesData.EncryptedData = EncryptStringToBytes_Aes(paddedBytes, myAes.Key, myAes.IV);
+            }
+            return aesData;
+        }
+        
+        public byte[] AESDecryption(AESData Data)
+        {
+            byte[] data = DecryptStringFromBytes_Aes(Data.EncryptedData, key, Data.IV);
+            return data;
+        }
 
-        protected byte[] EncryptStringToBytes_Aes(byte[] plainText, byte[] Key, byte[] IV)
+        private byte[] _DivideTwoByte(int value)
+        {
+            byte[] bytes = new byte[2];
+            bytes[0] = (byte)((value >> 8) & 0xFF);
+            bytes[1] = (byte)((value) & 0xFF);
+            return bytes;
+        }
+
+        private byte[] _DivideFourByte(long value)
+        {
+            byte[] bytes = new byte[4];
+            bytes[0] = (byte)((value >> 24) & 0xFF);
+            bytes[1] = (byte)((value >> 16) & 0xFF);
+            bytes[2] = (byte)((value >> 8) & 0xFF);
+            bytes[3] = (byte)((value) & 0xFF);
+            return bytes;
+        }
+
+        private byte[] EncryptStringToBytes_Aes(byte[] plainText, byte[] Key, byte[] IV)
         {
             // Check arguments.
             if (plainText == null || plainText.Length <= 0)
@@ -211,7 +280,7 @@ namespace Repo_Core.Abstract
             }
         }
 
-        protected byte[] DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
+        private byte[] DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
         {
             // Check arguments.
             if (cipherText == null || cipherText.Length <= 0)
@@ -238,32 +307,6 @@ namespace Repo_Core.Abstract
                     }
                 }
             }
-        }
-        
-        public AESData AESEncryption(byte[] Data)
-        {
-            AESData aesData = new AESData();
-            int paddedLength = (Data.Length / 16 + 1) * 16;
-            byte[] paddedBytes = new byte[paddedLength];
-            Array.Copy(Data, paddedBytes, Data.Length);
-            aesData.IV = new byte[16];
-            
-            using (Aes myAes = Aes.Create())
-            {
-                myAes.KeySize = key.Length * 8;
-                myAes.Key= key;
-                myAes.GenerateIV();
-
-                aesData.IV = myAes.IV;
-                aesData.EncryptedData = EncryptStringToBytes_Aes(paddedBytes, myAes.Key, myAes.IV);
-            }
-            return aesData;
-        }
-        
-        public byte[] AESDecryption(AESData Data)
-        {
-            byte[] data = DecryptStringFromBytes_Aes(Data.EncryptedData, key, Data.IV);
-            return data;
         }
 
     }

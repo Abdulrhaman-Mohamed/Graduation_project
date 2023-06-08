@@ -43,7 +43,6 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //builder.Services.AddTransient(typeof(IRegsiter<>), typeof(Regsiter_Method<>));
 builder.Services.AddTransient<IUnitWork, UnitWork>();
 builder.Services.AddSingleton<ISocketHandler, SocketHandler>();
-builder.Services.AddTransient<ISocketBuilder, SocketBuilder>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEditting, EdittingServices>();
 builder.Services.AddTransient<IBlogService, BlogService>();

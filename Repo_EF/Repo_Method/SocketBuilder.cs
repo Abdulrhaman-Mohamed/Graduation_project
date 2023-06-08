@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Repo_EF.Repo_Method
 {
 
-    public class SocketBuilder : ISocketBuilder
+    public class SocketBuilder 
     {
         private ISocketsFactory SocketHandle;
         private WebSocket ClassSocket { get; set; }
@@ -45,10 +45,10 @@ namespace Repo_EF.Repo_Method
                 ForgienSocket = await SocketHandle.GetSocketAsync(SocketID);  
             }
 
-            intiSocketClass.SetClassSocket(ClassSocket);
-            intiSocketClass.SetForgeinSocket(ForgienSocket);
+            //intiSocketClass.SetClassSocket(ClassSocket);
+            //intiSocketClass.SetForgeinSocket(ForgienSocket);
 
-            await intiSocketClass.RunTest();
+            //await intiSocketClass.RunTest();
         }
 
     }
