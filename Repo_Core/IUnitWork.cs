@@ -18,7 +18,7 @@ namespace Repo_Core
         IBaseRepo<CommandParam> CommandParams { get; }
         IBaseRepo<ParamType> ParamTypes { get; }
 
-        IBaseRepo<ParamValue> ParamValues { get; }
+
         IBaseRepo<Plan> Plans { get; }
         IBaseRepo<PlanResult> PlanResults { get; }
 

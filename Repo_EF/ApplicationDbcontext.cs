@@ -15,7 +15,7 @@ namespace Repo_EF
         public virtual DbSet<Command> Commands { get; set; }
         public virtual DbSet<CommandParam> CommandParams { get; set; }
         public virtual DbSet<ParamType> ParamTypes { get; set; }
-        public virtual DbSet<ParamValue> ParamValues { get; set; }
+    
         public virtual DbSet<Acknowledge> Acknowledges { get; set; }
         public virtual DbSet<Plan> Plans { get; set; }
         public virtual DbSet<PlanResult> PlanResults { get; set; }
@@ -77,14 +77,7 @@ namespace Repo_EF
             modelBuilder.Entity<CommandParam>()
                 .HasKey(c => new { c.Id, c.CommandId, c.SubSystemId });
 
-            // ParamType
-            modelBuilder.Entity<ParamType>().HasKey(c => new { c.Id });
-            // ParamValue
-            modelBuilder.Entity<ParamValue>().HasOne(c => c.CommandParam)
-                .WithMany(c => c.ParamValues)
-                .HasForeignKey(c => new { c.CommandParamID, c.CommandID, c.SubSystemID });
 
-            modelBuilder.Entity<ParamValue>().HasKey(c => new { c.Id, c.SubSystemID, c.CommandID, c.CommandParamID });
 
 
             // Identity

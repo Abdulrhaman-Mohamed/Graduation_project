@@ -43,18 +43,19 @@ namespace Graduation_project.Controllers
                 }));
 
         }
-        [HttpGet("GetTypeofeachCommand")]
-        public IActionResult GetTypeofeachCommand()
-        {
-            return Ok(_unitWork.CommandParams.GetWithInclude(new[] { "ParamType", "ParamValues" })
-                .Select(o => new
-                {
-                    o.SubSystemId,
-                    o.CommandId,
-                    Paramtype = o.ParamType,
-                    ParamValues = o.ParamValues.Select(i => new { i.Id, i.Description })
-                }));
-        }
+
+
+        //[HttpGet("GetTypeofeachCommand")]
+        //public IActionResult GetTypeofeachCommand()
+        //{
+        //    return Ok(_unitWork.CommandParams.GetWithInclude(new[] { "ParamType", "ParamValues" })
+        //        .Select(o => new
+        //        {
+        //            o.SubSystemId,
+        //            o.CommandId,
+                    
+        //        }));
+        //}
 
         //Online & Execute
         [HttpPost("saveallplan")]

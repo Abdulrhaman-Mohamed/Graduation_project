@@ -17,7 +17,7 @@ namespace Repo_Core.Models
 
         public virtual ParamType? ParamType { get; set; }
         public virtual Command? Command { get; set; }
-        public  List<ParamValue>?  ParamValues { get; set; }
+
 
 
     }

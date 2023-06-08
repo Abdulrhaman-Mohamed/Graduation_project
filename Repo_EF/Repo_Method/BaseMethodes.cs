@@ -31,6 +31,7 @@ namespace Repo_EF.Repo_Method
 
         public IEnumerable<T> GetWithInclude(string[] include)
         {
+
             IQueryable<T> Query = Context.Set<T>();
 
             if (!include.Equals(null))

@@ -39,7 +39,7 @@ public class ScheduledJobService : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public  Task StopAsync(CancellationToken cancellationToken)
     {
         _timer?.Dispose();
         return Task.CompletedTask;
@@ -84,6 +84,8 @@ public class ScheduledJobService : IHostedService, IDisposable
     //make time Elapsed which terminate
     private static void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
+
+
         _taskRunning = false;
         timer.Dispose();
     }

@@ -16,7 +16,7 @@ namespace Repo_EF.Repo_Method
         public IBaseRepo<Command> Commands { get; }
         public IBaseRepo<CommandParam> CommandParams { get; }
         public IBaseRepo<ParamType> ParamTypes { get; }
-        public IBaseRepo<ParamValue> ParamValues { get; }
+
         public IBaseRepo<Plan> Plans { get; }
         public IBaseRepo<PlanResult> PlanResults { get; }
         public ICreatePlan CreatePlan { get; }
@@ -34,7 +34,7 @@ namespace Repo_EF.Repo_Method
             Commands = new BaseMethodes<Command>(_dbContext);
             CommandParams = new BaseMethodes<CommandParam>(_dbContext);
             ParamTypes = new BaseMethodes<ParamType>(_dbContext);
-            ParamValues = new BaseMethodes<ParamValue>(_dbContext);
+
             Plans = new BaseMethodes<Plan>(_dbContext);
             PlanResults = new BaseMethodes<PlanResult>(_dbContext);
             PlayBack = new PlayBack(_dbContext);
