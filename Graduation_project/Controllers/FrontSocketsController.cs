@@ -53,6 +53,10 @@ namespace Graduation_project.Controllers
             await _HandleConnection(SocketType.RoverData);
         }
 
+        [HttpGet("TestSocket")]
+        public IActionResult SocketTest() { 
+            return Ok("Hello From Sockets");
+        }
     }
 }
 
