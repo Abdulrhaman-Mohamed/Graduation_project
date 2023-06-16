@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Text;
 using Repo_Core.Models;
 using Repo_Core.Abstract;
+using System.Reflection;
 
 namespace Repo_EF.Repo_Method
 {
@@ -17,7 +18,8 @@ namespace Repo_EF.Repo_Method
         private Hashtable _MoveCommand = new Hashtable();
         private Hashtable _socketsTable = new Hashtable();
         private ABCSocket _socketHanlder = new ABCSocket();
-        string filepath = "G:/Project/C#/Log/Log Data.txt";
+        //string filepath = "G:/Project/C#/Log/Log Data.txt";
+        private const string ImageFilePath = "E:/Project/Image";
         public SocketHandler()
         {
             _MoveCommand["w"] = 0;
@@ -72,23 +74,23 @@ namespace Repo_EF.Repo_Method
                     bytesEncoder = Encoding.UTF8.GetBytes(string.Join(',', plan.PlanSequenceNumber, plan.Result));
                     WebSocketReceiveResult result = new WebSocketReceiveResult(bytesEncoder.Length, WebSocketMessageType.Text, true);
                     await _SendData((WebSocket)_socketsTable[SocketType.Data], result, bytesEncoder);
-                    using (StreamWriter writer = new StreamWriter(filepath))
-                    {
-                        try
-                        {
-                            // Write data to the file
-                            writer.WriteLine(string.Join(',', plan.PlanSequenceNumber, plan.Result));
+                    //    using (StreamWriter writer = new StreamWriter(filepath))
+                    //    {
+                    //        try
+                    //        {
+                    //            // Write data to the file
+                    //            writer.WriteLine(string.Join(',', plan.PlanSequenceNumber, plan.Result));
 
-                            // You can write more data as needed
-                            // writer.WriteLine("More data...");
+                    //            // You can write more data as needed
+                    //            // writer.WriteLine("More data...");
 
-                            writer.WriteLine("Data written to the file successfully.");
-                        }
-                        catch (IOException e)
-                        {
-                            Console.WriteLine("An error occurred while writing to the file: " + e.Message);
-                        }
-                    }
+                    //            writer.WriteLine("Data written to the file successfully.");
+                    //        }
+                    //        catch (IOException e)
+                    //        {
+                    //            Console.WriteLine("An error occurred while writing to the file: " + e.Message);
+                    //        }
+                    //    }
                     //await _SendData((WebSocket)_socketsTable[SocketType.Data], data.Result, data.Bytes);
                 }
                 else
@@ -114,6 +116,7 @@ namespace Repo_EF.Repo_Method
 
         private async Task _imageType(SocketType Type) 
         {
+            int counter = 0;
             AcceptData data = new AcceptData();
             List<byte> imageBuffer = new List<byte>();
             int imageSize = 0;
@@ -122,10 +125,10 @@ namespace Repo_EF.Repo_Method
             while (true)
             {
                 if (!(_socketsTable.ContainsKey(SocketType.Image) && _socketsTable.ContainsKey(SocketType.RoverImage)))
-                    return;
+                    continue;
 
-                if (Type != SocketType.Image)
-                    return;
+                if (Type == SocketType.Image)
+                    continue;
 
                 data = await _RecieveData((WebSocket)_socketsTable[SocketType.RoverImage], buffer);
                 if(data.Result.CloseStatus.HasValue)
@@ -136,7 +139,13 @@ namespace Repo_EF.Repo_Method
                 if (Encoding.UTF8.GetString(buffer).Contains("done"))
                 {
                     WebSocketReceiveResult result = new WebSocketReceiveResult(imageSize, WebSocketMessageType.Binary, true);
-                    await _SendData((WebSocket)_socketsTable[SocketType.Image], result, imageBuffer.ToArray()); 
+                    using (MemoryStream ms = new MemoryStream(imageBuffer.ToArray()))
+                    {
+                        Image image = Image.FromStream(ms);
+                        image.Save($"E:/Project/Image/P{counter}.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        counter++;
+                    }
+                    await _SendData((WebSocket)_socketsTable[SocketType.Image], result, imageBuffer.ToArray());
                     imageSize = 0;
                     imageBuffer.Clear();
                 }
