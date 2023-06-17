@@ -192,6 +192,7 @@ namespace Repo_Core.Abstract
             planResult.PlanId = (int)(bytes[StartIndex] << 8 | bytes[StartIndex + 1]);
             planResult.PlanSequenceNumber = (int)(bytes[StartIndex + 2]);
             TimeSeconds = (ulong)((bytes[StartIndex + 3] << 24 | bytes[StartIndex + 4] << 16 | bytes[StartIndex + 5] << 8 | bytes[StartIndex + 6]));
+            planResult.Time = DateTime.Now;
             // Calcualte Time 
             X = (bytes[StartIndex + 7] << 8 | bytes[StartIndex + 8]);
             Y = (bytes[StartIndex + 9] << 8 | (bytes[StartIndex + 10]));

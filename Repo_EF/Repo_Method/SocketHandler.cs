@@ -19,8 +19,9 @@ namespace Repo_EF.Repo_Method
         private Hashtable _socketsTable = new Hashtable();
         private ABCSocket _socketHanlder = new ABCSocket();
         //string filepath = "G:/Project/C#/Log/Log Data.txt";
-        private const string ImageFilePath = "E:/Project/Image";
-        public SocketHandler()
+        //private const string ImageFilePath = "E:/Project/Image";
+        private readonly ApplicationDbContext _context;
+        public SocketHandler(ApplicationDbContext context)
         {
             _MoveCommand["w"] = 0;
             _MoveCommand["W"] = 0;
@@ -34,6 +35,7 @@ namespace Repo_EF.Repo_Method
             _MoveCommand["Q"] = 4;
             _MoveCommand["r"] = 5;
             _MoveCommand["R"] = 5;
+            _context = context;
         }
 
         public void SetSocket(SocketType Type, WebSocket Socket)
@@ -71,9 +73,12 @@ namespace Repo_EF.Repo_Method
                         break;
 
                     plan = _socketHanlder.BodyDeserialiazation(data.Bytes, 21);
+                     _context.PlanResults.Add(plan);
+                     _context.SaveChanges();
                     bytesEncoder = Encoding.UTF8.GetBytes(string.Join(',', plan.PlanSequenceNumber, plan.Result));
                     WebSocketReceiveResult result = new WebSocketReceiveResult(bytesEncoder.Length, WebSocketMessageType.Text, true);
                     await _SendData((WebSocket)_socketsTable[SocketType.Data], result, bytesEncoder);
+
                     //    using (StreamWriter writer = new StreamWriter(filepath))
                     //    {
                     //        try
@@ -120,7 +125,7 @@ namespace Repo_EF.Repo_Method
             AcceptData data = new AcceptData();
             List<byte> imageBuffer = new List<byte>();
             int imageSize = 0;
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[128];
 
             while (true)
             {
